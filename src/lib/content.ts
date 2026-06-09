@@ -1,4 +1,5 @@
 import type { Item } from "./data";
+import { site } from "./site";
 
 export function intro(i: Item): string {
   const base = `${i.title} is one of Rishikesh's most loved experiences. ${i.tagline} `;
@@ -46,7 +47,7 @@ export function carry(i: Item): string[] {
   return map[i.category] ?? ["Valid ID proof", "Comfortable clothing", "Water & sunscreen"];
 }
 
-const PHONE = "+91 76685 70551";
+const PHONE = site.phoneDisplay;
 const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
 
 export function faqs(i: Item): { q: string; a: string }[] {

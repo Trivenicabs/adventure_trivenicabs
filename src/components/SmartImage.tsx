@@ -16,9 +16,8 @@ function hash(s: string) {
   return Math.abs(h);
 }
 
-// Vintage screen-print treatment so every photo reads like a poster plate.
-const GRADE =
-  "linear-gradient(0deg, rgba(194,80,43,0.16), rgba(221,154,43,0.1)), linear-gradient(180deg, rgba(241,231,208,0.1), rgba(42,33,23,0.14))";
+// Light warm unify only — keep photos vivid & alive (adventure energy).
+const GRADE = "linear-gradient(180deg, rgba(221,154,43,0.05), rgba(194,80,43,0.06))";
 
 export default function SmartImage({
   src,
@@ -71,7 +70,7 @@ export default function SmartImage({
         sizes={sizes}
         priority={priority}
         className={`object-cover ${className}`}
-        style={{ filter: "sepia(0.22) saturate(0.86) contrast(1.06) brightness(1.03)" }}
+        style={{ filter: "saturate(1.16) contrast(1.08)" }}
         onError={() => setFailed(true)}
       />
       {grade && (

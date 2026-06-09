@@ -14,11 +14,11 @@
   --color-ink: #2a2117;       /* warm near-black */
   --color-ink-soft: #5b4f3d;  /* muted brown text */
 
-  /* poster inks */
-  --color-rust: #c2502b;      /* terracotta — primary */
-  --color-rust-dk: #9c3c1f;
-  --color-mustard: #dd9a2b;   /* ochre/gold */
-  --color-teal: #1f7a6b;      /* vintage teal — secondary */
+  /* poster inks — punchy */
+  --color-rust: #d6491f;      /* vivid terracotta — primary */
+  --color-rust-dk: #a8350f;
+  --color-mustard: #eca42a;   /* bright ochre/gold */
+  --color-teal: #1c8675;      /* vintage teal — secondary */
   --color-teal-dk: #145a4f;
   --color-forest: #2f4434;    /* deep pine */
   --color-sky: #6f9bbd;       /* faded poster sky */

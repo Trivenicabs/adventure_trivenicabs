@@ -6,7 +6,7 @@ import { site, waLink, telLink } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact Triveni Adventure Rishikesh",
   description:
-    "Get in touch with Triveni Adventure for Rishikesh adventure bookings, rentals and Char Dham yatra. Call or WhatsApp +91 76685 70551, 24×7.",
+    "Get in touch with Triveni Adventure for Rishikesh adventure bookings, rentals and Char Dham yatra. Call or WhatsApp +91 89235 34551, 24×7.",
 };
 
 export default function ContactPage() {
