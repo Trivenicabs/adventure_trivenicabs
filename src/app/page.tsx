@@ -5,6 +5,8 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import CTABand from "@/components/CTABand";
 import CinematicBand from "@/components/CinematicBand";
+import RouteMap from "@/components/RouteMap";
+import Divider from "@/components/Divider";
 import { Marquee } from "@/components/Marquee";
 import SmartImage from "@/components/SmartImage";
 import {
@@ -88,7 +90,7 @@ export default function Home() {
       <section id="activities" className="section-pad !pt-0">
         <div className="container-x">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <SectionHeading eyebrow="30+ adventures" title={<>The thrills everyone <span className="text-rust">comes for</span></>} />
+            <SectionHeading banner eyebrow="Featured expeditions" title={<>The thrills everyone <span className="text-rust">comes for</span></>} />
             <Reveal delay={0.1}>
               <Link href="/things-to-do-in-rishikesh" className="btn btn-paper">See all →</Link>
             </Reveal>
@@ -125,10 +127,13 @@ export default function Home() {
 
       <CinematicBand />
 
+      <RouteMap />
+
       {/* packages — feature + list */}
       <section className="section-pad !pt-0">
         <div className="container-x">
           <SectionHeading
+            banner
             eyebrow="Save more, do more"
             title={<>Combo <span className="text-rust">packages</span></>}
             sub="Bundled rafting, camping, bungee and zipline at one all-in price."
@@ -206,8 +211,10 @@ export default function Home() {
         </div>
       </section>
 
+      <Divider color="forest" bg="paper" />
+
       {/* yatra */}
-      <section className="section-pad !pt-0">
+      <section className="bg-paper section-pad">
         <div className="container-x">
           <SectionHeading align="center" eyebrow="Pilgrimage" title={<>Char Dham & <span className="text-rust">Yatra</span></>} sub="The sacred Himalayan circuit — by cab or by bike, with stays, permits and guidance handled." />
           <div className="mx-auto mt-10 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import SmartImage from "./SmartImage";
 import Stamp from "./Stamp";
 import { img } from "@/lib/images";
@@ -10,8 +11,16 @@ import { site, waLink } from "@/lib/site";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Hero() {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const yPhoto = useTransform(scrollYProgress, [0, 1], ["0%", "-16%"]);
+
   return (
-    <section className="relative overflow-hidden border-b-2 border-ink bg-paper">
+    <section ref={ref} className="relative overflow-hidden border-b-2 border-ink bg-paper">
       {/* sunburst behind artwork */}
       <div className="sunburst pointer-events-none absolute -right-40 -top-40 hidden h-[44rem] w-[44rem] rounded-full lg:block" />
 
@@ -110,6 +119,7 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.15, ease }}
+          style={{ y: reduce ? undefined : yPhoto }}
           className="relative mx-auto w-full max-w-md lg:max-w-none"
         >
           <div className="print-frame aspect-[4/5] rotate-1 shadow-[6px_6px_0_0_var(--color-ink)]">
