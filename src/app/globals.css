@@ -226,6 +226,51 @@ body {
   box-shadow: var(--shadow-hard);
 }
 
+/* vintage script accent */
+.font-script {
+  font-family: var(--font-script), cursive;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* topographic contour-line texture (subtle, for section bands) */
+.contour {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240' viewBox='0 0 400 240'%3E%3Cg fill='none' stroke='%232a2117' stroke-width='1.2' opacity='0.07'%3E%3Cpath d='M-20 60 Q100 10 200 60 T420 60'/%3E%3Cpath d='M-20 90 Q100 40 200 90 T420 90'/%3E%3Cpath d='M-20 120 Q100 70 200 120 T420 120'/%3E%3Cpath d='M-20 150 Q100 100 200 150 T420 150'/%3E%3Cpath d='M-20 180 Q100 130 200 180 T420 180'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* trail / route dashed line */
+.trail-dash {
+  border: 0;
+  border-top: 3px dashed var(--color-rust);
+  height: 0;
+}
+
+/* ribbon banner header */
+.banner {
+  position: relative;
+  display: inline-block;
+  background: var(--color-rust);
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 1.4rem;
+  border: 2px solid var(--color-ink);
+  box-shadow: var(--shadow-hard-sm);
+}
+.banner::before,
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0.9rem;
+  background: inherit;
+  border: 2px solid var(--color-ink);
+}
+.banner::before { left: -0.9rem; clip-path: polygon(0 50%, 100% 0, 100% 100%); }
+.banner::after { right: -0.9rem; clip-path: polygon(100% 50%, 0 0, 0 100%); }
+
 /* sunburst rays behind hero */
 .sunburst {
   background-image: repeating-conic-gradient(

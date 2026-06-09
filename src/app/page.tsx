@@ -219,7 +219,7 @@ export default function Home() {
       </section>
 
       {/* why triveni */}
-      <section className="border-y-2 border-ink bg-paper-2 section-pad">
+      <section className="contour border-y-2 border-ink bg-paper-2 section-pad">
         <div className="container-x">
           <SectionHeading align="center" eyebrow="Why Triveni" title={<>Trusted on the road. <span className="text-rust">Now on the river.</span></>} />
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

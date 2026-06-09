@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import Divider from "./Divider";
 import { site, waLink, telLink } from "@/lib/site";
 import { activities, packages, rentals, yatra } from "@/lib/data";
 
@@ -8,7 +9,9 @@ const col = (items: { slug: string; title: string }[], n = 5) =>
 
 export default function Footer() {
   return (
-    <footer className="border-t-2 border-ink bg-ink text-paper">
+    <>
+    <Divider color="ink" bg="paper" />
+    <footer className="bg-ink text-paper">
       <div className="container-x section-pad !pb-10">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
@@ -57,6 +60,7 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+    </>
   );
 }
 

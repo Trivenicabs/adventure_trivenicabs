@@ -27,11 +27,20 @@ export default function Hero() {
             Est. Rishikesh · India&apos;s Adventure Capital
           </motion.span>
 
+          <motion.p
+            initial={{ opacity: 0, rotate: -4 }}
+            animate={{ opacity: 1, rotate: -3 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mt-3 inline-block font-script text-[1.9rem] leading-none text-teal"
+          >
+            Welcome, thrill-seeker —
+          </motion.p>
+
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05, ease }}
-            className="mt-5 font-display text-[clamp(2.9rem,8.5vw,6rem)] text-ink"
+            className="font-display text-[clamp(2.9rem,8.5vw,6rem)] text-ink"
           >
             Chase the{" "}
             <span className="text-rust">thrill</span>

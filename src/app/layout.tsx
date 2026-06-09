@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, DM_Serif_Display, DM_Sans } from "next/font/google";
+import { Anton, DM_Serif_Display, DM_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 import Nav from "@/components/Nav";
@@ -21,6 +21,12 @@ const dmSerif = DM_Serif_Display({
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dmsans",
+  display: "swap",
+});
+const caveat = Caveat({
+  weight: ["600", "700"],
+  subsets: ["latin"],
+  variable: "--font-script",
   display: "swap",
 });
 
@@ -47,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${dmSerif.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${anton.variable} ${dmSerif.variable} ${dmSans.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <div className="grain-overlay" aria-hidden />
