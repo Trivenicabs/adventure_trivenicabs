@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { site, waLink, telLink } from "@/lib/site";
@@ -33,8 +34,15 @@ export default function Nav() {
       <nav className="border-b-2 border-ink bg-paper">
         <div className="container-x flex items-center justify-between py-3">
           <Link href="/" className="group flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-md border-2 border-ink bg-rust font-display text-lg text-cream shadow-[3px_3px_0_0_var(--color-ink)]">
-              T
+            <span className="relative h-11 w-11 overflow-hidden rounded-md border-2 border-ink shadow-[3px_3px_0_0_var(--color-ink)]">
+              <Image
+                src="/brand/triveni-logo.webp"
+                alt="Triveni"
+                fill
+                className="object-cover"
+                sizes="44px"
+                priority
+              />
             </span>
             <span className="leading-none">
               <span className="block font-display text-xl tracking-tight text-ink">

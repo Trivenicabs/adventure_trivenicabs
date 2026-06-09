@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { site, waLink, telLink } from "@/lib/site";
 import { activities, packages, rentals, yatra } from "@/lib/data";
 
@@ -12,8 +13,8 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-md border-2 border-paper bg-rust font-display text-lg text-cream">
-                T
+              <span className="relative h-11 w-11 overflow-hidden rounded-md border-2 border-paper">
+                <Image src="/brand/triveni-logo.webp" alt="Triveni" fill className="object-cover" sizes="44px" />
               </span>
               <span className="font-display text-xl uppercase">Triveni Adventure</span>
             </div>
