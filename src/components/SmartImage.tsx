@@ -22,7 +22,6 @@ const GRADE = "linear-gradient(180deg, rgba(221,154,43,0.05), rgba(194,80,43,0.0
 export default function SmartImage({
   src,
   alt,
-  emoji,
   priority,
   sizes = "100vw",
   className = "",
@@ -30,7 +29,6 @@ export default function SmartImage({
 }: {
   src: string;
   alt: string;
-  emoji?: string;
   priority?: boolean;
   sizes?: string;
   className?: string;
@@ -47,8 +45,11 @@ export default function SmartImage({
         role="img"
         aria-label={alt}
       >
-        <div className="absolute inset-0 grid place-items-center text-6xl opacity-40 select-none">
-          {emoji ?? "🏔️"}
+        <div className="absolute inset-0 grid place-items-center opacity-40 select-none">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="#faf3e2" aria-hidden>
+            <path d="M3 20h18L15 8l-3 5-2-3-7 10Z" />
+            <circle cx="17.5" cy="6" r="1.6" />
+          </svg>
         </div>
         <div
           className="absolute inset-0"
