@@ -35,6 +35,7 @@ export default function SmartImage({
   grade?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const grad = GRADIENTS[hash(alt) % GRADIENTS.length];
 
   if (failed) {
@@ -64,17 +65,28 @@ export default function SmartImage({
 
   return (
     <>
+      {/* instant warm placeholder so frames are never empty while loading */}
+      <div
+        aria-hidden
+        className={`absolute inset-0 transition-opacity duration-500 ${
+          loaded ? "opacity-0" : "opacity-100"
+        }`}
+        style={{ background: grad }}
+      />
       <Image
         src={src}
         alt={alt}
         fill
         sizes={sizes}
         priority={priority}
-        className={`object-cover ${className}`}
+        className={`object-cover transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        } ${className}`}
         style={{ filter: "saturate(1.16) contrast(1.08)" }}
+        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
       />
-      {grade && (
+      {grade && loaded && (
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
