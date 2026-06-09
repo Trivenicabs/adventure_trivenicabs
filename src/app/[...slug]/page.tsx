@@ -9,9 +9,7 @@ import { allItems, itemBySlug, categoryMeta, type Item } from "@/lib/data";
 import { img, galleryFor } from "@/lib/images";
 import { intro, includes, excludes, carry, faqs, priceTable } from "@/lib/content";
 import { themeFor } from "@/lib/themes";
-import ThemeAtmosphere from "@/components/ThemeAtmosphere";
 import { site, waLink, telLink } from "@/lib/site";
-import type { CSSProperties } from "react";
 
 export function generateStaticParams() {
   return allItems.map((i) => ({ slug: i.slug.split("/") }));
@@ -59,102 +57,82 @@ export default async function DetailPage({
   const car = carry(item);
   const qa = faqs(item);
   const prices = priceTable(item);
+  const vibe = themeFor(item).label;
   const bookMsg = `Hi ${site.name}! I'm interested in "${item.title}". Please share details & availability.`;
-  const theme = themeFor(item);
-  const themeVars = {
-    "--ta": theme.a,
-    "--tb": theme.b,
-    "--tink": theme.ink,
-  } as CSSProperties;
 
   return (
-    <article className="pb-10" style={themeVars}>
+    <article>
       <Schema item={item} qa={qa} />
 
-      {/* hero */}
-      <header className="relative min-h-[82svh] overflow-hidden">
-        <div className="absolute inset-0">
-          <SmartImage src={img[item.image]} alt={item.title} emoji={item.emoji} priority sizes="100vw" />
-          <div className="absolute inset-0 bg-gradient-to-b from-night/45 via-night/65 to-night" />
-          <div className="absolute inset-0 bg-gradient-to-r from-night/80 to-transparent" />
-          <div
-            className="absolute inset-0 opacity-60 mix-blend-soft-light"
-            style={{ background: `radial-gradient(70% 60% at 20% 30%, ${theme.a}, transparent 60%)` }}
-          />
-        </div>
-
-        {/* themed aurora blooms */}
-        <div className="aurora left-[6%] top-[18%] h-80 w-80" style={{ background: `${theme.a}33` }} />
-        <div className="aurora right-[8%] top-[30%] h-96 w-96 [animation-delay:-4s]" style={{ background: `${theme.b}33` }} />
-
-        {/* vibe-specific motion atmosphere */}
-        <ThemeAtmosphere vibe={theme.vibe} a={theme.a} b={theme.b} />
-
-        <div className="container-x relative z-10 flex min-h-[82svh] flex-col justify-end pb-14 pt-32">
+      {/* poster hero */}
+      <header className="border-b-2 border-ink bg-paper-2">
+        <div className="container-x py-10 sm:py-14">
           <Breadcrumb item={item} />
-          <Reveal>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span className="chip chip-theme ring-theme">
-                {item.emoji} {theme.label}
-              </span>
-              <span className="chip">{categoryMeta[item.category].label}</span>
-              {item.badge && (
-                <span className="chip bg-theme-a !border-transparent" style={{ color: theme.ink }}>
-                  {item.badge}
-                </span>
-              )}
-            </div>
-            <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.2rem,6vw,4.6rem)] font-semibold leading-[0.96]">
-              {item.title}
-            </h1>
-            <p className="mt-4 max-w-xl text-lg text-mute">{item.tagline}</p>
-          </Reveal>
+          <div className="mt-6 grid items-center gap-10 lg:grid-cols-[1fr_0.9fr]">
+            <Reveal>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="tag">{categoryMeta[item.category].label}</span>
+                <span className="tag !bg-teal !text-cream">{vibe}</span>
+                {item.badge && <span className="tag !bg-rust !text-cream">{item.badge}</span>}
+              </div>
+              <h1 className="section-h mt-4 max-w-2xl !text-[clamp(2.4rem,6vw,4.4rem)] text-ink">
+                {item.title}
+              </h1>
+              <p className="mt-4 max-w-xl font-serif-d text-lg leading-snug text-ink-soft">
+                {item.tagline}
+              </p>
 
-          <Reveal delay={0.15}>
-            <div className="mt-7 flex flex-wrap items-center gap-4">
-              {item.priceFrom && (
-                <div className="glass-dark rounded-2xl px-5 py-3 glow-theme">
-                  <div className="text-xs text-mute">Starting from</div>
-                  <div className="font-display text-2xl font-semibold text-theme">
-                    ₹{item.priceFrom.toLocaleString("en-IN")}
-                    <span className="ml-1 text-sm font-normal text-mute">
-                      {item.unit}
-                    </span>
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                {item.priceFrom && (
+                  <div className="panel-cream px-4 py-2">
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-ink-soft">Starting from</div>
+                    <div className="font-display text-2xl text-rust">
+                      ₹{item.priceFrom.toLocaleString("en-IN")}
+                      <span className="ml-1 text-xs font-normal text-ink-soft">{item.unit}</span>
+                    </div>
                   </div>
+                )}
+                <div className="panel-cream px-4 py-2">
+                  <div className="text-[11px] font-bold uppercase tracking-wide text-ink-soft">Rated</div>
+                  <div className="font-display text-2xl text-ink">{site.rating}★</div>
                 </div>
-              )}
-              <div className="glass-dark rounded-2xl px-5 py-3">
-                <div className="text-xs text-mute">Rated</div>
-                <div className="font-display text-2xl font-semibold text-mist">
-                  {site.rating}★
+                <div className="flex gap-3">
+                  <a href={waLink(bookMsg)} target="_blank" rel="noopener" className="btn btn-rust">Book on WhatsApp</a>
+                  <a href={telLink()} className="btn btn-paper">Call</a>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <a href={waLink(bookMsg)} target="_blank" rel="noopener" className="btn btn-theme">
-                  Book on WhatsApp
-                </a>
-                <a href={telLink()} className="btn btn-ghost">Call</a>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <div className="print-frame aspect-[4/3] rotate-1 shadow-[6px_6px_0_0_var(--color-ink)]">
+                <SmartImage src={img[item.image]} alt={item.title} priority sizes="(max-width:1024px) 90vw, 540px" />
+                {item.priceFrom && (
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t-2 border-ink bg-mustard px-4 py-2">
+                    <span className="font-display text-sm uppercase tracking-wide text-ink">{categoryMeta[item.category].label}</span>
+                    <span className="font-display text-sm text-rust-dk">₹{item.priceFrom.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </header>
 
-      <div className="container-x mt-14 grid gap-12 lg:grid-cols-[1fr_22rem]">
+      <div className="container-x mt-12 grid gap-12 pb-16 lg:grid-cols-[1fr_22rem]">
         {/* main */}
         <div className="min-w-0">
           <Reveal>
-            <p className="text-lg leading-relaxed text-mist/90">{intro(item)}</p>
+            <p className="font-serif-d text-xl leading-snug text-ink">{intro(item)}</p>
           </Reveal>
 
           {item.highlights && (
             <Reveal className="mt-10">
-              <h2 className="section-h">Highlights</h2>
+              <h2 className="section-h text-ink">Highlights</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {item.highlights.map((h) => (
-                  <div key={h} className="glass-soft flex items-start gap-3 rounded-2xl p-4">
-                    <span className="mt-0.5 text-theme">✦</span>
-                    <span className="text-sm text-mist">{h}</span>
+                  <div key={h} className="panel flex items-start gap-3 bg-paper p-4">
+                    <span className="mt-0.5 font-display text-rust">★</span>
+                    <span className="text-sm text-ink">{h}</span>
                   </div>
                 ))}
               </div>
@@ -163,12 +141,12 @@ export default async function DetailPage({
 
           {item.meta && (
             <Reveal className="mt-10">
-              <h2 className="section-h">Quick facts</h2>
+              <h2 className="section-h text-ink">Quick facts</h2>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {item.meta.map((m) => (
-                  <div key={m.label} className="glass rounded-2xl p-4">
-                    <div className="text-xs uppercase tracking-wide text-mute">{m.label}</div>
-                    <div className="mt-1 font-display text-lg font-semibold text-mist">{m.value}</div>
+                  <div key={m.label} className="panel bg-cream p-4">
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-teal">{m.label}</div>
+                    <div className="mt-1 font-display text-lg text-ink">{m.value}</div>
                   </div>
                 ))}
               </div>
@@ -177,33 +155,25 @@ export default async function DetailPage({
 
           {prices && (
             <Reveal className="mt-10">
-              <h2 className="section-h">Price list</h2>
-              <p className="mt-1 text-sm text-mute">{prices.caption}</p>
-              <div className="mt-4 overflow-hidden rounded-glass glass">
+              <h2 className="section-h text-ink">Price list</h2>
+              <p className="mt-1 text-sm text-ink-soft">{prices.caption}</p>
+              <div className="panel mt-4 overflow-hidden bg-paper">
                 <table className="w-full text-left text-sm">
                   <tbody>
                     {prices.rows.map((r, idx) => (
-                      <tr
-                        key={r.label}
-                        className={idx ? "border-t border-white/8" : ""}
-                      >
-                        <td className="px-5 py-3.5 font-medium text-mist">
+                      <tr key={r.label} className={idx ? "border-t-2 border-ink/12" : ""}>
+                        <td className="px-5 py-3.5 font-medium text-ink">
                           {r.label}
-                          {r.note && (
-                            <span className="ml-2 text-xs text-mute">{r.note}</span>
-                          )}
+                          {r.note && <span className="ml-2 text-xs text-ink-soft">{r.note}</span>}
                         </td>
-                        <td className="px-5 py-3.5 text-right font-display font-semibold text-theme">
-                          {r.price}
-                        </td>
+                        <td className="px-5 py-3.5 text-right font-display text-rust">{r.price}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <p className="mt-2 text-xs text-mute">
-                Prices are indicative and vary by date, season & availability —
-                message us for a live quote.
+              <p className="mt-2 text-xs text-ink-soft">
+                Prices are indicative and vary by date, season & availability — message us for a live quote.
               </p>
             </Reveal>
           )}
@@ -212,12 +182,12 @@ export default async function DetailPage({
             <div className="mt-10 grid gap-5 sm:grid-cols-2">
               {inc.length > 0 && (
                 <Reveal>
-                  <div className="glass h-full rounded-glass p-6">
-                    <h3 className="font-display text-lg font-semibold text-mist">What&apos;s included</h3>
+                  <div className="panel h-full bg-paper p-6">
+                    <h3 className="font-display text-xl uppercase text-ink">What&apos;s included</h3>
                     <ul className="mt-4 grid gap-2.5 text-sm">
                       {inc.map((x) => (
-                        <li key={x} className="flex gap-2 text-mist">
-                          <span className="text-theme">✓</span> {x}
+                        <li key={x} className="flex gap-2 text-ink">
+                          <span className="font-bold text-teal">✓</span> {x}
                         </li>
                       ))}
                     </ul>
@@ -226,12 +196,12 @@ export default async function DetailPage({
               )}
               {exc.length > 0 && (
                 <Reveal delay={0.08}>
-                  <div className="glass h-full rounded-glass p-6">
-                    <h3 className="font-display text-lg font-semibold text-mist">Not included</h3>
+                  <div className="panel h-full bg-paper p-6">
+                    <h3 className="font-display text-xl uppercase text-ink">Not included</h3>
                     <ul className="mt-4 grid gap-2.5 text-sm">
                       {exc.map((x) => (
-                        <li key={x} className="flex gap-2 text-mute">
-                          <span className="text-ember">✕</span> {x}
+                        <li key={x} className="flex gap-2 text-ink-soft">
+                          <span className="font-bold text-rust">✕</span> {x}
                         </li>
                       ))}
                     </ul>
@@ -243,12 +213,10 @@ export default async function DetailPage({
 
           {car.length > 0 && (
             <Reveal className="mt-10">
-              <h2 className="section-h">What to carry</h2>
+              <h2 className="section-h text-ink">What to carry</h2>
               <div className="mt-4 flex flex-wrap gap-2">
                 {car.map((c) => (
-                  <span key={c} className="glass-soft rounded-full px-4 py-2 text-sm text-mist">
-                    {c}
-                  </span>
+                  <span key={c} className="panel bg-cream px-4 py-2 text-sm text-ink">{c}</span>
                 ))}
               </div>
             </Reveal>
@@ -256,23 +224,18 @@ export default async function DetailPage({
 
           {/* gallery */}
           <Reveal className="mt-10">
-            <h2 className="section-h">Gallery</h2>
+            <h2 className="section-h text-ink">Gallery</h2>
             <div className="mt-4 grid auto-rows-[10rem] grid-cols-2 gap-3 sm:grid-cols-4">
-              {galleryFor(item.image, theme.vibe, item.slug).map((g, idx) => (
+              {galleryFor(item.image, themeFor(item).vibe, item.slug).map((g, idx) => (
                 <div
                   key={idx}
-                  className={`group relative overflow-hidden rounded-2xl ring-1 ring-white/8 ${
-                    idx === 0
-                      ? "col-span-2 row-span-2"
-                      : idx === 1
-                      ? "col-span-2 sm:col-span-2"
-                      : ""
+                  className={`group relative overflow-hidden rounded-card border-2 border-ink ${
+                    idx === 0 ? "col-span-2 row-span-2" : idx === 1 ? "col-span-2" : ""
                   }`}
                 >
-                  <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110">
-                    <SmartImage src={g} alt={`${item.title} — photo ${idx + 1}`} emoji={item.emoji} sizes="(max-width:768px) 50vw, 360px" />
+                  <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
+                    <SmartImage src={g} alt={`${item.title} — photo ${idx + 1}`} sizes="(max-width:768px) 50vw, 360px" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-night/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
               ))}
             </div>
@@ -280,40 +243,34 @@ export default async function DetailPage({
 
           {/* faq */}
           <Reveal className="mt-12">
-            <h2 className="section-h">Frequently asked questions</h2>
+            <h2 className="section-h text-ink">Frequently asked questions</h2>
             <FaqList items={qa} />
           </Reveal>
         </div>
 
         {/* sticky booking aside */}
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="glass rounded-glass p-6">
+        <aside className="lg:sticky lg:top-28 lg:self-start">
+          <div className="panel bg-paper-2 p-6">
             <div className="flex items-baseline justify-between">
-              <span className="text-sm text-mute">
+              <span className="font-display text-sm uppercase text-ink-soft">
                 {item.priceFrom ? "Book from" : "Get a quote"}
               </span>
               {item.priceFrom && (
-                <span className="font-display text-2xl font-semibold text-theme">
-                  ₹{item.priceFrom.toLocaleString("en-IN")}
-                </span>
+                <span className="font-display text-2xl text-rust">₹{item.priceFrom.toLocaleString("en-IN")}</span>
               )}
             </div>
-            {item.unit && <div className="text-xs text-mute">{item.unit}</div>}
+            {item.unit && <div className="text-xs text-ink-soft">{item.unit}</div>}
             <div className="mt-5 grid gap-2.5">
-              <a href={waLink(bookMsg)} target="_blank" rel="noopener" className="btn btn-theme justify-center">
-                Book on WhatsApp
-              </a>
-              <a href={telLink()} className="btn btn-ghost justify-center">
-                Call {site.phoneDisplay}
-              </a>
+              <a href={waLink(bookMsg)} target="_blank" rel="noopener" className="btn btn-rust justify-center">Book on WhatsApp</a>
+              <a href={telLink()} className="btn btn-teal justify-center">Call {site.phoneDisplay}</a>
             </div>
-            <p className="mt-4 text-center text-xs text-mute">
+            <p className="mt-4 text-center text-xs text-ink-soft">
               Instant confirmation · No advance payment · 24×7 support
             </p>
-            <div className="mt-5 border-t border-white/10 pt-4 text-sm">
-              <a href={site.parentUrl} target="_blank" rel="noopener" className="flex items-center justify-between text-mute hover:text-mist">
+            <div className="mt-5 border-t-2 border-ink/15 pt-4 text-sm">
+              <a href={site.parentUrl} target="_blank" rel="noopener" className="flex items-center justify-between font-display text-xs uppercase text-ink-soft hover:text-rust">
                 <span>Need a cab from Delhi?</span>
-                <span className="text-cyan">trivenicabs.in →</span>
+                <span className="text-rust">trivenicabs.in →</span>
               </a>
             </div>
           </div>
@@ -322,15 +279,17 @@ export default async function DetailPage({
 
       {/* related */}
       {rel.length > 0 && (
-        <section className="container-x mt-16">
-          <h2 className="section-h">You might also like</h2>
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {rel.map((r) => (
-              <ItemCard key={r.slug} item={r} />
-            ))}
-          </div>
-          <div className="mt-8">
-            <Link href="/" className="btn btn-ghost">← Back to all adventures</Link>
+        <section className="border-t-2 border-ink bg-paper-2 section-pad">
+          <div className="container-x">
+            <h2 className="section-h text-ink">You might also like</h2>
+            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {rel.map((r) => (
+                <ItemCard key={r.slug} item={r} />
+              ))}
+            </div>
+            <div className="mt-8">
+              <Link href="/" className="btn btn-paper">← Back to all adventures</Link>
+            </div>
           </div>
         </section>
       )}
@@ -340,12 +299,12 @@ export default async function DetailPage({
 
 function Breadcrumb({ item }: { item: Item }) {
   return (
-    <nav className="flex flex-wrap items-center gap-2 text-xs text-mute">
-      <Link href="/" className="hover:text-mist">Home</Link>
+    <nav className="flex flex-wrap items-center gap-2 font-display text-xs uppercase tracking-wide text-ink-soft">
+      <Link href="/" className="hover:text-rust">Home</Link>
       <span>/</span>
-      <span className="text-cyan">{categoryMeta[item.category].label}</span>
+      <span className="text-teal">{categoryMeta[item.category].label}</span>
       <span>/</span>
-      <span className="text-mist">{item.title}</span>
+      <span className="text-ink">{item.title}</span>
     </nav>
   );
 }
@@ -386,9 +345,6 @@ function Schema({ item, qa }: { item: Item; qa: { q: string; a: string }[] }) {
     ],
   };
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
   );
 }

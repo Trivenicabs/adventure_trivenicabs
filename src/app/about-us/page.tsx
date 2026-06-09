@@ -22,12 +22,12 @@ export default function AboutPage() {
     <>
       <PageHeader
         eyebrow="About us"
-        title={<>Trusted on the road. <span className="shimmer-text">Born for the river.</span></>}
+        title={<>Trusted on the road. <span className="text-rust">Born for the river.</span></>}
         sub={`${site.name} is the Rishikesh adventure arm of ${site.parent}, North India's trusted travel brand since 2015.`}
       />
-      <section className="container-x grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+      <section className="container-x section-pad grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
         <Reveal>
-          <div className="space-y-5 text-mist/90 leading-relaxed">
+          <div className="space-y-5 text-ink leading-relaxed">
             <p>
               For nearly a decade, {site.parent} has moved travellers safely across North
               India — Delhi to Rishikesh, airport transfers and multi-day Himalayan tours.
@@ -49,9 +49,9 @@ export default function AboutPage() {
         <Reveal delay={0.1}>
           <div className="grid grid-cols-2 gap-4">
             {stats.map((s) => (
-              <div key={s.l} className="glass rounded-glass p-6 text-center">
-                <div className="font-display text-3xl font-semibold text-gold">{s.v}</div>
-                <div className="mt-1 text-xs text-mute">{s.l}</div>
+              <div key={s.l} className="panel rounded-card p-6 text-center">
+                <div className="font-display text-3xl font-semibold text-rust">{s.v}</div>
+                <div className="mt-1 text-xs text-ink-soft">{s.l}</div>
               </div>
             ))}
           </div>

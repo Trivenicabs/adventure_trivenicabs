@@ -12,14 +12,14 @@ export default function SectionHeading({
   align?: "left" | "center";
 }) {
   return (
-    <Reveal
-      className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : ""}`}
-    >
-      {eyebrow && <span className="chip ring-aurora">{eyebrow}</span>}
-      <h2 className="mt-4 font-display text-[clamp(1.9rem,4.2vw,3.1rem)] font-semibold leading-[1.05]">
-        {title}
-      </h2>
-      {sub && <p className="mt-3 text-base leading-relaxed text-mute">{sub}</p>}
+    <Reveal className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : ""}`}>
+      {eyebrow && <span className={`eyebrow ${align === "center" ? "center" : ""}`}>{eyebrow}</span>}
+      <h2 className="section-h mt-3 text-ink">{title}</h2>
+      {sub && (
+        <p className="mt-3 font-serif-d text-lg leading-snug text-ink-soft">
+          {sub}
+        </p>
+      )}
     </Reveal>
   );
 }

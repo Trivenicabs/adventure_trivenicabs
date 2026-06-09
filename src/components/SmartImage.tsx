@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useState } from "react";
 
 const GRADIENTS = [
-  "linear-gradient(135deg,#0a1f26,#12b3a3 120%)",
-  "linear-gradient(135deg,#07151a,#f5ce2e 160%)",
-  "linear-gradient(135deg,#0a1f26,#2ee6c8 140%)",
-  "linear-gradient(135deg,#091a1e,#ff7a45 170%)",
+  "linear-gradient(135deg,#c2502b,#dd9a2b 130%)",
+  "linear-gradient(135deg,#1f7a6b,#dd9a2b 150%)",
+  "linear-gradient(135deg,#2f4434,#1f7a6b 140%)",
+  "linear-gradient(135deg,#9c3c1f,#c2502b 160%)",
 ];
 
 function hash(s: string) {
@@ -16,10 +16,9 @@ function hash(s: string) {
   return Math.abs(h);
 }
 
-// Unified cinematic grade applied over every photo so disparate sources
-// read as one cohesive brand world (teal shadows → warm gold highlights).
+// Vintage screen-print treatment so every photo reads like a poster plate.
 const GRADE =
-  "linear-gradient(180deg, rgba(6,14,20,0.12) 0%, rgba(6,14,20,0) 38%, rgba(6,14,20,0.4) 100%), linear-gradient(115deg, rgba(36,240,212,0.12) 0%, transparent 48%, rgba(255,207,31,0.1) 100%)";
+  "linear-gradient(0deg, rgba(194,80,43,0.16), rgba(221,154,43,0.1)), linear-gradient(180deg, rgba(241,231,208,0.1), rgba(42,33,23,0.14))";
 
 export default function SmartImage({
   src,
@@ -72,14 +71,14 @@ export default function SmartImage({
         sizes={sizes}
         priority={priority}
         className={`object-cover ${className}`}
-        style={{ filter: "contrast(1.05) saturate(1.06) brightness(0.96)" }}
+        style={{ filter: "sepia(0.22) saturate(0.86) contrast(1.06) brightness(1.03)" }}
         onError={() => setFailed(true)}
       />
       {grade && (
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
-          style={{ background: GRADE, mixBlendMode: "soft-light" }}
+          style={{ background: GRADE, mixBlendMode: "multiply" }}
         />
       )}
     </>

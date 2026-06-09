@@ -14,18 +14,20 @@ export default function FaqList({
       {items.map((f, i) => {
         const isOpen = open === i;
         return (
-          <div key={i} className="glass-soft overflow-hidden rounded-2xl">
+          <div key={i} className="panel overflow-hidden bg-paper">
             <button
               onClick={() => setOpen(isOpen ? null : i)}
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
             >
-              <span className="font-medium text-mist">{f.q}</span>
+              <span className="font-display text-base uppercase leading-tight text-ink">
+                {f.q}
+              </span>
               <span
-                className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border border-white/20 text-cyan transition-transform duration-300 ${
-                  isOpen ? "rotate-45" : ""
+                className={`grid h-7 w-7 shrink-0 place-items-center rounded border-2 border-ink font-display text-lg transition-colors ${
+                  isOpen ? "bg-rust text-cream" : "bg-mustard text-ink"
                 }`}
               >
-                +
+                {isOpen ? "–" : "+"}
               </span>
             </button>
             <AnimatePresence initial={false}>
@@ -34,9 +36,9 @@ export default function FaqList({
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.25 }}
                 >
-                  <p className="px-5 pb-5 text-sm leading-relaxed text-mute">
+                  <p className="border-t-2 border-ink/15 px-5 py-4 font-serif-d text-[15px] leading-snug text-ink-soft">
                     {f.a}
                   </p>
                 </motion.div>

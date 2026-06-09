@@ -26,10 +26,10 @@ export default function FaqsPage() {
     <>
       <PageHeader
         eyebrow="FAQs"
-        title={<>Everything you need to <span className="shimmer-text">know</span></>}
+        title={<>Everything you need to <span className="text-rust">know</span></>}
         sub="Still unsure? Message us on WhatsApp — we reply fast, 24×7."
       />
-      <section className="container-x max-w-3xl">
+      <section className="container-x section-pad max-w-3xl">
         <FaqList items={qa} />
       </section>
       <CTABand />

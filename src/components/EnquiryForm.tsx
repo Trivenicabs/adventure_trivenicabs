@@ -36,7 +36,7 @@ export default function EnquiryForm() {
         e.preventDefault();
         window.open(waLink(msg), "_blank");
       }}
-      className="glass rounded-glass p-6 sm:p-8"
+      className="panel bg-paper-2 p-6 sm:p-8"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Your name">
@@ -48,7 +48,7 @@ export default function EnquiryForm() {
         <Field label="Interested in">
           <select className="inp" value={interest} onChange={(e) => setInterest(e.target.value)}>
             {interests.map((i) => (
-              <option key={i} className="bg-night" value={i}>{i}</option>
+              <option key={i} value={i}>{i}</option>
             ))}
           </select>
         </Field>
@@ -62,10 +62,10 @@ export default function EnquiryForm() {
           <input className="inp" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Pickup from Delhi, etc." />
         </Field>
       </div>
-      <button type="submit" className="btn btn-gold mt-6 w-full justify-center">
+      <button type="submit" className="btn btn-rust mt-6 w-full justify-center">
         Send enquiry on WhatsApp →
       </button>
-      <p className="mt-3 text-center text-xs text-mute">
+      <p className="mt-3 text-center text-xs text-ink-soft">
         No advance payment · Instant reply · Or call {site.phoneDisplay}
       </p>
     </form>
@@ -75,7 +75,7 @@ export default function EnquiryForm() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-mute">
+      <span className="mb-1.5 block font-display text-xs uppercase tracking-[0.12em] text-teal">
         {label}
       </span>
       {children}

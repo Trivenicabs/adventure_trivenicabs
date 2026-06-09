@@ -7,29 +7,22 @@ const col = (items: { slug: string; title: string }[], n = 5) =>
 
 export default function Footer() {
   return (
-    <footer className="relative mt-20 border-t border-white/10 bg-night-2/60">
-      <div className="aurora -top-24 left-1/4 h-72 w-72 bg-cyan/10" />
-      <div className="container-x relative section-pad !pb-10">
+    <footer className="border-t-2 border-ink bg-ink text-paper">
+      <div className="container-x section-pad !pb-10">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gold font-display text-sm font-bold text-night">
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-md border-2 border-paper bg-rust font-display text-lg text-cream">
                 T
               </span>
-              <span className="font-display text-lg font-semibold">
-                Triveni Adventure
-              </span>
+              <span className="font-display text-xl uppercase">Triveni Adventure</span>
             </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-mute">
+            <p className="mt-4 max-w-xs font-serif-d text-sm leading-snug text-paper/70">
               Rishikesh adventure sports, camping, Char Dham yatra & self-drive
-              rentals — by {site.parent}, North India&apos;s trusted travel
-              brand.
+              rentals — by {site.parent}, North India&apos;s trusted travel brand.
             </p>
-            <div className="mt-5 flex items-center gap-1.5 text-sm">
-              <span className="text-gold">★ {site.rating}</span>
-              <span className="text-mute">
-                / 5 · {site.reviewCount.toLocaleString()}+ travellers
-              </span>
+            <div className="mt-5 font-display text-sm text-mustard">
+              ★ {site.rating} / 5 · {site.reviewCount.toLocaleString()}+ travellers
             </div>
           </div>
 
@@ -40,40 +33,25 @@ export default function Footer() {
           <div>
             <h4 className="footer-h">Get in touch</h4>
             <div className="mt-4 grid gap-2 text-sm">
-              <a href={telLink()} className="text-mist hover:text-gold">
-                {site.phoneDisplay}
-              </a>
-              <a
-                href={waLink()}
-                className="text-mist hover:text-cyan"
-                target="_blank"
-                rel="noopener"
-              >
-                WhatsApp us
-              </a>
-              <a href={`mailto:${site.email}`} className="text-mute hover:text-mist">
-                {site.email}
-              </a>
-              <a
-                href={site.parentUrl}
-                className="mt-2 inline-block text-mute hover:text-mist"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href={telLink()} className="hover:text-mustard">{site.phoneDisplay}</a>
+              <a href={waLink()} className="hover:text-mustard" target="_blank" rel="noopener">WhatsApp us</a>
+              <a href={`mailto:${site.email}`} className="text-paper/70 hover:text-paper">{site.email}</a>
+              <a href={site.parentUrl} className="mt-2 inline-block text-paper/70 hover:text-paper" target="_blank" rel="noopener">
                 ← Need a cab? trivenicabs.in
               </a>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-mute sm:flex-row sm:items-center sm:justify-between">
+        <hr className="mt-12 border-0 border-t-2 border-paper/25" />
+        <div className="mt-6 flex flex-col gap-3 text-xs text-paper/60 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Triveni Adventure · {site.domain}</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/privacy-policy" className="hover:text-mist">Privacy</Link>
-            <Link href="/terms-and-conditions" className="hover:text-mist">Terms</Link>
-            <Link href="/cancellation-and-refund-policy" className="hover:text-mist">Cancellation</Link>
-            <Link href="/about-us" className="hover:text-mist">About</Link>
-            <Link href="/contact-us" className="hover:text-mist">Contact</Link>
+          <div className="flex flex-wrap gap-4 font-display uppercase tracking-wide">
+            <Link href="/privacy-policy" className="hover:text-mustard">Privacy</Link>
+            <Link href="/terms-and-conditions" className="hover:text-mustard">Terms</Link>
+            <Link href="/cancellation-and-refund-policy" className="hover:text-mustard">Cancellation</Link>
+            <Link href="/about-us" className="hover:text-mustard">About</Link>
+            <Link href="/contact-us" className="hover:text-mustard">Contact</Link>
           </div>
         </div>
       </div>
@@ -94,7 +72,7 @@ function FooterCol({
       <ul className="mt-4 grid gap-2 text-sm">
         {links.map((l) => (
           <li key={l.href}>
-            <Link href={l.href} className="text-mute transition-colors hover:text-mist">
+            <Link href={l.href} className="text-paper/75 transition-colors hover:text-mustard">
               {l.label}
             </Link>
           </li>

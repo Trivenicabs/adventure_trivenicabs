@@ -24,19 +24,19 @@ export default function ReviewsPage() {
     <>
       <PageHeader
         eyebrow={`★ ${site.rating} / 5 · ${site.reviewCount.toLocaleString()}+ travellers`}
-        title={<>Loved by <span className="shimmer-text">thrill-seekers</span></>}
+        title={<>Loved by <span className="text-rust">thrill-seekers</span></>}
         sub="A 4.9★ legacy from Triveni Cabs, now powering Rishikesh's best adventures."
       />
-      <section className="container-x">
+      <section className="container-x section-pad">
         <div className="columns-1 gap-5 sm:columns-2 lg:columns-3">
           {reviews.map((r, i) => (
             <Reveal key={r.name} delay={(i % 3) * 0.08} className="mb-5 inline-block w-full">
-              <figure className="glass rounded-glass p-6">
-                <div className="flex gap-0.5 text-gold">★★★★★</div>
-                <blockquote className="mt-3 text-sm leading-relaxed text-mist">“{r.text}”</blockquote>
+              <figure className="panel rounded-card p-6">
+                <div className="flex gap-0.5 text-rust">★★★★★</div>
+                <blockquote className="mt-3 text-sm leading-relaxed text-ink">“{r.text}”</blockquote>
                 <figcaption className="mt-4 flex items-center justify-between text-sm">
-                  <span className="font-medium text-mist">{r.name} <span className="text-mute">· {r.from}</span></span>
-                  <span className="chip !text-[10px]">{r.tag}</span>
+                  <span className="font-medium text-ink">{r.name} <span className="text-ink-soft">· {r.from}</span></span>
+                  <span className="tag !text-[10px]">{r.tag}</span>
                 </figcaption>
               </figure>
             </Reveal>
