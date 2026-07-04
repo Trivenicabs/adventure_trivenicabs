@@ -8,6 +8,7 @@ import FaqList from "@/components/FaqList";
 import { allItems, itemBySlug, categoryMeta, type Item } from "@/lib/data";
 import { img, galleryFor } from "@/lib/images";
 import { intro, includes, excludes, carry, faqs, priceTable } from "@/lib/content";
+import { keywordsFor, metaTitle, metaDescription, breadcrumbSchema } from "@/lib/seo";
 import { themeFor } from "@/lib/themes";
 import { site, waLink, telLink } from "@/lib/site";
 
@@ -23,14 +24,28 @@ export async function generateMetadata({
   const { slug } = await params;
   const item = itemBySlug(slug.join("/"));
   if (!item) return {};
-  const title = `${item.title}${
-    item.priceFrom ? ` — from ₹${item.priceFrom.toLocaleString("en-IN")}` : ""
-  }`;
+  const title = metaTitle(item);
+  const description = metaDescription(item);
+  const url = `${site.baseUrl}/${item.slug}`;
   return {
     title,
-    description: `${item.tagline} Book ${item.keyword} with Triveni — certified, instant WhatsApp booking, 24×7 support.`,
-    alternates: { canonical: `${site.baseUrl}/${item.slug}` },
-    openGraph: { title, description: item.tagline, images: [img[item.image]] },
+    description,
+    keywords: keywordsFor(item),
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+      siteName: site.name,
+      images: [{ url: img[item.image], alt: item.keyword }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [img[item.image]],
+    },
   };
 }
 
@@ -105,7 +120,7 @@ export default async function DetailPage({
 
             <Reveal delay={0.1}>
               <div className="print-frame aspect-[4/3] rotate-1 shadow-[6px_6px_0_0_var(--color-ink)]">
-                <SmartImage src={img[item.image]} alt={item.title} priority sizes="(max-width:1024px) 90vw, 540px" />
+                <SmartImage src={img[item.image]} alt={`${item.keyword} — ${item.title}`} priority sizes="(max-width:1024px) 90vw, 540px" />
                 {item.priceFrom && (
                   <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t-2 border-ink bg-mustard px-4 py-2">
                     <span className="font-display text-sm uppercase tracking-wide text-ink">{categoryMeta[item.category].label}</span>
@@ -313,11 +328,14 @@ function Schema({ item, qa }: { item: Item; qa: { q: string; a: string }[] }) {
   const data = {
     "@context": "https://schema.org",
     "@graph": [
+      breadcrumbSchema(item),
       {
         "@type": "Product",
         name: item.title,
         description: item.tagline,
         image: img[item.image],
+        keywords: keywordsFor(item).join(", "),
+        category: categoryMeta[item.category].label,
         brand: { "@type": "Brand", name: site.name },
         aggregateRating: {
           "@type": "AggregateRating",
