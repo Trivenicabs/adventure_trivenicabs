@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
+import Reveal from "@/components/Reveal";
 import EnquiryForm from "@/components/EnquiryForm";
 import { site, waLink, telLink } from "@/lib/site";
 
@@ -18,6 +19,7 @@ export default function BookNowPage() {
         sub="Tell us what you're after — we reply on WhatsApp with availability and the best price. No advance payment needed."
       />
       <section className="container-x section-pad grid gap-8 lg:grid-cols-[1fr_20rem]">
+      <Reveal rotate={-0.9}>
         <EnquiryForm />
         <aside className="grid gap-4">
           <a href={waLink(`Hi ${site.name}! I'd like to book.`)} target="_blank" rel="noopener" className="panel card-lift rounded-card p-6">
@@ -41,6 +43,7 @@ export default function BookNowPage() {
             </ul>
           </div>
         </aside>
+      </Reveal>
       </section>
     </>
   );

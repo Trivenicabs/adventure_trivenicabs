@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import ItemCard from "@/components/ItemCard";
-import Reveal from "@/components/Reveal";
+import Reveal, { RevealItem } from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import CTABand from "@/components/CTABand";
 import CinematicBand from "@/components/CinematicBand";
@@ -58,9 +58,12 @@ export default function Home() {
             title={<>Six ways to feel <span className="text-rust">alive</span></>}
             sub="From white-water and free-falls to sacred Himalayan circuits and self-drive freedom."
           />
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* One staggered parent sequences the six cards, instead of each child
+              carrying its own delay={i * 0.05}. The alternating start angle is
+              what makes the row land as hand-placed rather than in lockstep. */}
+          <Reveal stagger={0.07} className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((c, i) => (
-              <Reveal key={c.key} delay={i * 0.05}>
+              <RevealItem key={c.key} rotate={i % 2 === 0 ? -1.6 : 1.6}>
                 <Link href={c.href} className="group card-lift panel block overflow-hidden bg-paper">
                   <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-ink">
                     <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
@@ -80,9 +83,9 @@ export default function Home() {
                     <span className="font-display text-2xl text-rust">→</span>
                   </div>
                 </Link>
-              </Reveal>
+              </RevealItem>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 

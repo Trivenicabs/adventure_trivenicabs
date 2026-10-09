@@ -1,5 +1,6 @@
-import { site, waLink, telLink } from "@/lib/site";
+import { site, telLink } from "@/lib/site";
 import Reveal from "./Reveal";
+import BookButton from "./BookButton";
 
 export default function CTABand() {
   return (
@@ -19,14 +20,7 @@ export default function CTABand() {
                 from the Delhi cab to the riverside camp.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <a
-                  href={waLink(`Hi ${site.name}! I'd like to plan a trip.`)}
-                  target="_blank"
-                  rel="noopener"
-                  className="btn btn-mustard"
-                >
-                  Book on WhatsApp
-                </a>
+                <BookButton product="Rishikesh Trip Planning" className="btn btn-mustard" />
                 <a href={telLink()} className="btn btn-paper">
                   Call {site.phoneDisplay}
                 </a>

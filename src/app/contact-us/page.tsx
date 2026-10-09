@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
+import Reveal from "@/components/Reveal";
 import EnquiryForm from "@/components/EnquiryForm";
 import { site, waLink, telLink } from "@/lib/site";
 
@@ -18,6 +19,7 @@ export default function ContactPage() {
         sub="Questions, custom itineraries or group bookings — we're here 24×7."
       />
       <section className="container-x section-pad grid gap-8 lg:grid-cols-2">
+      <Reveal rotate={0.9}>
         <div className="grid gap-4">
           <a href={telLink()} className="panel card-lift rounded-card p-6">
             <div className="footer-h">Call / WhatsApp</div>
@@ -44,6 +46,7 @@ export default function ContactPage() {
           <h2 className="section-h mb-4">Send an enquiry</h2>
           <EnquiryForm />
         </div>
+      </Reveal>
       </section>
     </>
   );

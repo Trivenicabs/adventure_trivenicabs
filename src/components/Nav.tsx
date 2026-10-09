@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { site, waLink, telLink } from "@/lib/site";
+import BookButton from "./BookButton";
+import { site, telLink } from "@/lib/site";
 
 const links = [
   { href: "/river-rafting-in-rishikesh", label: "Rafting" },
@@ -67,14 +68,11 @@ export default function Nav() {
           </div>
 
           <div className="flex items-center gap-2">
-            <a
-              href={waLink(`Hi ${site.name}! I'd like to book.`)}
-              target="_blank"
-              rel="noopener"
+            <BookButton
+              product="Rishikesh Adventure"
+              label="Book Now"
               className="btn btn-rust !py-2 !px-4 text-sm"
-            >
-              Book Now
-            </a>
+            />
             <button
               onClick={() => setOpen((o) => !o)}
               className="grid h-10 w-10 place-items-center rounded-md border-2 border-ink bg-cream lg:hidden"

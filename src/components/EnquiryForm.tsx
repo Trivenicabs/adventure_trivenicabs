@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { site, waLink } from "@/lib/site";
+import { captureLead, trackEvent } from "@/lib/analytics";
 
 const interests = [
   "River Rafting",
@@ -34,6 +35,19 @@ export default function EnquiryForm() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+
+        // 1. Lead details (incl. phone) → Google Sheet. Fire-and-forget so it
+        //    can never delay or block the WhatsApp hand-off below.
+        void captureLead({ name, phone, interest, date, people, notes });
+
+        // 2. Anonymous conversion count → GA4. Deliberately NO name/phone here:
+        //    sending PII to Analytics breaches Google's policy.
+        trackEvent("enquiry_submit", {
+          event_category: "conversion",
+          event_label: interest,
+          people,
+        });
+
         window.open(waLink(msg), "_blank");
       }}
       className="panel bg-paper-2 p-6 sm:p-8"

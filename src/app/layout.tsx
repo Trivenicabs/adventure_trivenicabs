@@ -3,6 +3,8 @@ import { Anton, DM_Serif_Display, DM_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 import { localBusinessSchema } from "@/lib/seo";
+import { analytics } from "@/lib/analytics";
+import Analytics from "@/components/Analytics";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import StickyCTA from "@/components/StickyCTA";
@@ -60,6 +62,10 @@ export const metadata: Metadata = {
     description: site.description,
   },
   alternates: { canonical: site.baseUrl },
+  // Search Console ownership proof — omitted entirely until the token is set.
+  ...(analytics.gscVerification && {
+    verification: { google: analytics.gscVerification },
+  }),
 };
 
 export default function RootLayout({
@@ -80,6 +86,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <StickyCTA />
+        <Analytics />
       </body>
     </html>
   );

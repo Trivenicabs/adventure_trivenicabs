@@ -5,8 +5,9 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import SmartImage from "./SmartImage";
 import Stamp from "./Stamp";
+import BookButton from "./BookButton";
 import { img } from "@/lib/images";
-import { site, waLink } from "@/lib/site";
+import { site } from "@/lib/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -100,14 +101,11 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-7 flex flex-wrap gap-3"
           >
-            <a
-              href={waLink(`Hi ${site.name}! I'd like to book an adventure.`)}
-              target="_blank"
-              rel="noopener"
+            <BookButton
+              product="Rishikesh Adventure"
+              label="Book your adventure"
               className="btn btn-rust"
-            >
-              Book your adventure
-            </a>
+            />
             <Link href="/#activities" className="btn btn-paper">
               Explore 30+ activities
             </Link>

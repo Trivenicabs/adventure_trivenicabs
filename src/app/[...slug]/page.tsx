@@ -2,15 +2,18 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import SmartImage from "@/components/SmartImage";
-import Reveal from "@/components/Reveal";
+import Reveal, { RevealItem } from "@/components/Reveal";
 import ItemCard from "@/components/ItemCard";
 import FaqList from "@/components/FaqList";
+import BookButton from "@/components/BookButton";
 import { allItems, itemBySlug, categoryMeta, type Item } from "@/lib/data";
 import { img, galleryFor } from "@/lib/images";
 import { intro, includes, excludes, carry, faqs, priceTable } from "@/lib/content";
 import { keywordsFor, metaTitle, metaDescription, breadcrumbSchema } from "@/lib/seo";
 import { themeFor } from "@/lib/themes";
-import { site, waLink, telLink } from "@/lib/site";
+import { site, telLink } from "@/lib/site";
+import { crossLinkFor, mainUrl, transportSetFor } from "@/lib/crosslinks";
+import { sourcesFor } from "@/lib/sources";
 
 export function generateStaticParams() {
   return allItems.map((i) => ({ slug: i.slug.split("/") }));
@@ -73,7 +76,9 @@ export default async function DetailPage({
   const qa = faqs(item);
   const prices = priceTable(item);
   const vibe = themeFor(item).label;
-  const bookMsg = `Hi ${site.name}! I'm interested in "${item.title}". Please share details & availability.`;
+  const priceDetail = item.priceFrom
+    ? `Listed from ₹${item.priceFrom.toLocaleString("en-IN")} ${item.unit ?? ""}`.trim()
+    : undefined;
 
   return (
     <article>
@@ -112,7 +117,7 @@ export default async function DetailPage({
                   <div className="font-display text-2xl text-ink">{site.rating}★</div>
                 </div>
                 <div className="flex gap-3">
-                  <a href={waLink(bookMsg)} target="_blank" rel="noopener" className="btn btn-rust">Book on WhatsApp</a>
+                  <BookButton product={item.title} detail={priceDetail} />
                   <a href={telLink()} className="btn btn-paper">Call</a>
                 </div>
               </div>
@@ -261,6 +266,80 @@ export default async function DetailPage({
             <h2 className="section-h text-ink">Frequently asked questions</h2>
             <FaqList items={qa} />
           </Reveal>
+
+          {/* Official sources for the changeable facts this page states —
+              registration requirements, seasonal windows, local advisories.
+              Renders nothing on pages that make no sourceable claim. */}
+          {(() => {
+            const sources = sourcesFor(item.slug, item.category);
+            if (sources.length === 0) return null;
+            return (
+              <Reveal className="mt-12">
+                <h2 className="section-h text-ink">Where these details come from</h2>
+                <p className="mt-2 text-sm text-ink-soft">
+                  Seasons, registration rules and temple dates are set by the authorities below
+                  and do change. Confirm them for your own dates before you travel.
+                </p>
+                <ul className="mt-4 grid gap-3">
+                  {sources.map((src) => (
+                    <li key={src.url}>
+                      <a
+                        href={src.url}
+                        target="_blank"
+                        rel="noopener"
+                        className="block rounded-lg border-2 border-ink/15 bg-paper-2 px-4 py-3 hover:border-rust"
+                      >
+                        <span className="flex items-center justify-between gap-2 font-semibold text-ink">
+                          <span>{src.label}</span>
+                          <span aria-hidden="true" className="text-rust">↗</span>
+                        </span>
+                        <span className="mt-0.5 block text-xs text-ink-soft">{src.forWhat}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            );
+          })()}
+
+          {/* Transport options on the main Triveni Cabs site. The sidebar offers
+              the single most relevant journey; this gives the reader the full
+              set — fare, one-way, airport, distance, tolls, group vehicle —
+              because somebody planning arrival wants all of them. */}
+          {(() => {
+            const transport = transportSetFor(item.slug, item.category);
+            if (!transport) return null;
+            return (
+              <Reveal className="mt-12">
+                <h2 className="section-h text-ink">{transport.heading}</h2>
+                <p className="mt-2 text-sm text-ink-soft">{transport.intro}</p>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {transport.links.map((l) => (
+                    <li key={l.path}>
+                      <a
+                        href={mainUrl(l.path)}
+                        target="_blank"
+                        rel="noopener"
+                        className="block h-full rounded-lg border-2 border-ink/15 bg-paper-2 px-4 py-3 hover:border-rust"
+                      >
+                        <span className="flex items-center justify-between gap-2 font-semibold text-ink">
+                          <span>{l.label}</span>
+                          <span aria-hidden="true" className="text-rust">↗</span>
+                        </span>
+                        {l.note && (
+                          <span className="mt-0.5 block text-xs text-ink-soft">{l.note}</span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-3 text-xs text-ink-soft">
+                  Journeys are booked with Triveni Cabs; the activity is booked here. Confirm the
+                  activity first — its reporting time decides when you need to travel.
+                </p>
+              </Reveal>
+            );
+          })()}
         </div>
 
         {/* sticky booking aside */}
@@ -276,17 +355,38 @@ export default async function DetailPage({
             </div>
             {item.unit && <div className="text-xs text-ink-soft">{item.unit}</div>}
             <div className="mt-5 grid gap-2.5">
-              <a href={waLink(bookMsg)} target="_blank" rel="noopener" className="btn btn-rust justify-center">Book on WhatsApp</a>
+              <BookButton product={item.title} detail={priceDetail} className="btn btn-rust justify-center" />
               <a href={telLink()} className="btn btn-teal justify-center">Call {site.phoneDisplay}</a>
             </div>
             <p className="mt-4 text-center text-xs text-ink-soft">
               Instant confirmation · No advance payment · 24×7 support
             </p>
+            {/* Transport link, chosen for this page rather than a generic
+                homepage link: a reader on the Char Dham page gets the Char Dham
+                cab page, a reader on the Haridwar tour gets Delhi to Haridwar. */}
             <div className="mt-5 border-t-2 border-ink/15 pt-4 text-sm">
-              <a href={site.parentUrl} target="_blank" rel="noopener" className="flex items-center justify-between font-display text-xs uppercase text-ink-soft hover:text-rust">
-                <span>Need a cab from Delhi?</span>
-                <span className="text-rust">trivenicabs.in →</span>
-              </a>
+              {(() => {
+                const cross = crossLinkFor(item.slug, item.category);
+                return (
+                  <a
+                    href={mainUrl(cross.path)}
+                    target="_blank"
+                    rel="noopener"
+                    className="block hover:text-rust"
+                  >
+                    <span className="font-display text-xs uppercase text-ink-soft">
+                      Getting there
+                    </span>
+                    <span className="mt-1 flex items-center justify-between gap-2 font-semibold text-ink">
+                      <span>{cross.label}</span>
+                      <span className="text-rust">→</span>
+                    </span>
+                    {cross.note && (
+                      <span className="mt-0.5 block text-xs text-ink-soft">{cross.note}</span>
+                    )}
+                  </a>
+                );
+              })()}
             </div>
           </div>
         </aside>
@@ -297,11 +397,16 @@ export default async function DetailPage({
         <section className="border-t-2 border-ink bg-paper-2 section-pad">
           <div className="container-x">
             <h2 className="section-h text-ink">You might also like</h2>
-            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {rel.map((r) => (
-                <ItemCard key={r.slug} item={r} />
+            {/* The related grid closes all 77 content pages. A staggered reveal
+                with alternating start angles makes it read as a set being laid
+                out rather than appearing at once. */}
+            <Reveal stagger={0.06} className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {rel.map((r, i) => (
+                <RevealItem key={r.slug} rotate={i % 2 === 0 ? -1.4 : 1.4}>
+                  <ItemCard item={r} />
+                </RevealItem>
               ))}
-            </div>
+            </Reveal>
             <div className="mt-8">
               <Link href="/" className="btn btn-paper">← Back to all adventures</Link>
             </div>

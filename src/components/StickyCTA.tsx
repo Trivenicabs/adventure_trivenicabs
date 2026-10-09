@@ -1,6 +1,7 @@
 "use client";
 
-import { waLink, telLink, site } from "@/lib/site";
+import { telLink } from "@/lib/site";
+import BookButton from "./BookButton";
 
 export default function StickyCTA() {
   return (
@@ -9,14 +10,11 @@ export default function StickyCTA() {
         <a href={telLink()} className="btn btn-paper flex-1 justify-center !py-2.5">
           Call
         </a>
-        <a
-          href={waLink(`Hi ${site.name}! I'd like to book.`)}
-          target="_blank"
-          rel="noopener"
+        <BookButton
+          product="Rishikesh Adventure"
+          label="WhatsApp Book"
           className="btn btn-rust flex-1 justify-center !py-2.5"
-        >
-          WhatsApp Book
-        </a>
+        />
       </div>
     </div>
   );

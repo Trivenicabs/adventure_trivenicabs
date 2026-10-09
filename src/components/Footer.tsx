@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { footerMainLinks, mainUrl } from "@/lib/crosslinks";
 import Image from "next/image";
 import Divider from "./Divider";
 import { site, waLink, telLink } from "@/lib/site";
@@ -40,9 +41,34 @@ export default function Footer() {
               <a href={telLink()} className="hover:text-mustard">{site.phoneDisplay}</a>
               <a href={waLink()} className="hover:text-mustard" target="_blank" rel="noopener">WhatsApp us</a>
               <a href={`mailto:${site.email}`} className="text-paper/70 hover:text-paper">{site.email}</a>
-              <a href={site.parentUrl} className="mt-2 inline-block text-paper/70 hover:text-paper" target="_blank" rel="noopener">
-                ← Need a cab? trivenicabs.in
-              </a>
+              {/* Cabs and transfers are the other half of the trip, run by the
+                  parent business. Linking the journeys readers actually ask for
+                  rather than only the homepage. */}
+              <div className="mt-3 border-t border-paper/20 pt-3">
+                <span className="footer-h block text-xs">Cabs &amp; transfers</span>
+                <ul className="mt-2 grid gap-1.5">
+                  {footerMainLinks.map((l) => (
+                    <li key={l.path}>
+                      <a
+                        href={mainUrl(l.path)}
+                        className="text-paper/70 hover:text-paper"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        {l.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={site.parentUrl}
+                  className="mt-2 inline-block text-paper/60 hover:text-paper"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  ← All services at trivenicabs.in
+                </a>
+              </div>
             </div>
           </div>
         </div>

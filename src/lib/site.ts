@@ -11,7 +11,9 @@ export const site = {
   phoneDisplay: "+91 89235 34551",
   whatsapp: "918923534551",
   email: "adventuretrivenicabs@gmail.com",
-  parentUrl: "https://trivenicabs.in",
+  // Canonical host for the main site. The bare domain redirects to www, so
+  // linking straight to www saves every cross-site link a redirect hop.
+  parentUrl: "https://www.trivenicabs.in",
   rating: 4.9,
   reviewCount: 10000,
   social: {

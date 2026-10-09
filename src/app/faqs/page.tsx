@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
+import Reveal from "@/components/Reveal";
 import FaqList from "@/components/FaqList";
 import CTABand from "@/components/CTABand";
 import { site } from "@/lib/site";
@@ -30,7 +31,9 @@ export default function FaqsPage() {
         sub="Still unsure? Message us on WhatsApp — we reply fast, 24×7."
       />
       <section className="container-x section-pad max-w-3xl">
+      <Reveal rotate={-0.7}>
         <FaqList items={qa} />
+      </Reveal>
       </section>
       <CTABand />
     </>

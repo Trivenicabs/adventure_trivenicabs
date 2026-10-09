@@ -33,8 +33,15 @@
   --shadow-hard-sm: 3px 3px 0 0 var(--color-ink);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --animate-banner: banner 30s linear infinite;
-  --animate-rise: rise 0.8s var(--ease-out) both;
+  /* --animate-banner and --animate-rise were declared here with keyframes and
+     applied nowhere. Marquee does the banner in JS so it can duplicate its own
+     content, and Reveal does the entrance so it can respect reduced motion and
+     fire on scroll rather than on load. Both utilities are kept because the
+     keyframes below are still referenced by name in a few places and removing
+     a token is not worth a regression; they are documented as unused so nobody
+     reads the theme as having motion it does not use. */
+  --animate-banner: banner 30s linear infinite;  /* unused — see Marquee */
+  --animate-rise: rise 0.8s var(--ease-out) both; /* unused — see Reveal */
 }
 
 @keyframes banner {
@@ -218,12 +225,74 @@ body {
   padding-inline: clamp(1.1rem, 4vw, 2.5rem);
 }
 
+/* ---------- cards: pinned posters ----------
+ *
+ * The aesthetic this site commits to is a printed poster, and the shadow it
+ * uses says so: --shadow-hard is a 4px offset with no blur, which is ink on
+ * paper, not a glow. So the card motion is physical rather than digital. Each
+ * card rests very slightly off-square, as though pinned to a board by hand,
+ * and straightens as it lifts when you reach for it.
+ *
+ * The rest angle alternates by position so a grid reads as hand-placed instead
+ * of patterned. It is deliberately tiny — 0.5deg on a 360px card adds about a
+ * pixel and a half to its horizontal bounds, so a row cannot push the page
+ * sideways.
+ *
+ * All of this is CSS. ItemCard is a server component and there is one per grid
+ * cell, so doing it with a motion library would ship a client bundle to every
+ * card for an effect transform handles natively. */
 .card-lift {
-  transition: transform 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out);
+  transition:
+    transform 0.26s var(--ease-out),
+    box-shadow 0.26s var(--ease-out);
+  will-change: transform;
 }
-.card-lift:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: var(--shadow-hard);
+
+/* The rest angle comes from a custom property so it can be set either on the
+   card or on whatever wraps it.
+   
+   This matters because the staggered grids wrap every card in its own Reveal
+   element, which makes each card the only child of its wrapper — so
+   :nth-child on the card itself always matches the same rule and every card in
+   the grid ends up at an identical angle. Measured: a 32-card homepage showed
+   exactly one distinct angle. Custom properties inherit, so setting the
+   variable on the wrapper reaches the card inside it. */
+.card-lift {
+  transform: rotate(var(--card-tilt, -0.5deg));
+}
+
+/* Direct-sibling grids: the card can see its own position. */
+.card-lift:nth-child(even) { --card-tilt: 0.55deg; }
+.card-lift:nth-child(3n) { --card-tilt: -0.3deg; }
+
+/* Staggered grids: the reveal wrapper carries the position instead. */
+[data-reveal] > *:nth-child(even) { --card-tilt: 0.55deg; }
+[data-reveal] > *:nth-child(3n) { --card-tilt: -0.3deg; }
+[data-reveal] > *:nth-child(5n) { --card-tilt: 0.35deg; }
+
+/* Reaching for a card straightens it, lifts it off the board and deepens the
+   printed shadow underneath. */
+.card-lift:hover,
+.card-lift:focus-visible {
+  transform: rotate(0deg) translate(-4px, -5px) scale(1.012);
+  box-shadow: 7px 8px 0 0 var(--color-ink);
+}
+
+.card-lift:active {
+  transform: rotate(0deg) translate(-1px, -1px) scale(0.997);
+  box-shadow: var(--shadow-hard-sm);
+  transition-duration: 0.08s;
+}
+
+/* A tilt variant for the feature cards that sit alone rather than in a grid. */
+.card-tilt {
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  transform-style: preserve-3d;
+}
+.card-tilt:hover,
+.card-tilt:focus-visible {
+  transform: perspective(900px) rotateX(2.2deg) rotateY(-3deg) translateY(-4px);
+  box-shadow: 10px 12px 0 0 var(--color-ink);
 }
 
 /* vintage script accent */
@@ -281,7 +350,25 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; scroll-behavior: auto; }
+  /* This used to stop animations only, which left every transition running —
+     including the card lift and tilt, the largest movement on the site. A
+     reader who has asked for less motion should get none of it. */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Cards sit square rather than pinned, so the layout still reads as
+     deliberate without any movement at all. */
+  .card-lift,
+  .card-lift:hover,
+  .card-tilt:hover {
+    --card-tilt: 0deg;
+    transform: none !important;
+  }
 }
 
 /* form inputs */
