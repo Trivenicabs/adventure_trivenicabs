@@ -17,6 +17,21 @@ export type CrossLink = {
   note?: string;
 };
 
+// Both of these point at the URL the main site actually serves, not the one it
+// redirects away from. Checked 9 Oct 2026 against the live site with redirects
+// unfollowed:
+//
+//   /delhi-to-haridwar              308 -> /one-way-cab/delhi-to-haridwar
+//   /one-way-cab/delhi-to-rishikesh 308 -> /delhi-to-rishikesh
+//
+// They redirect in opposite directions, which is why the pair looks
+// inconsistent: the main site's Week 43 booking-canonical rules consolidated
+// each route onto whichever URL Google ranked better at the time, and that was
+// the corridor page for Rishikesh and the one-way page for Haridwar.
+//
+// Worth re-checking whenever those rules change, since a redirected link costs
+// a hop on every page carrying it — and /delhi-to-haridwar is in the footer,
+// so it was costing one on all 88.
 const MAIN = "https://www.trivenicabs.in";
 
 /** Build the absolute URL for a main-site path. */
@@ -90,12 +105,12 @@ const BY_SLUG: Record<string, CrossLink> = {
 
   // Haridwar.
   "haridwar-tour-from-rishikesh": {
-    path: "/delhi-to-haridwar",
+    path: "/one-way-cab/delhi-to-haridwar",
     label: "Delhi to Haridwar cab fares",
     note: "Or a Rishikesh-Haridwar local transfer",
   },
   "haridwar-ganga-aarti-tour": {
-    path: "/delhi-to-haridwar",
+    path: "/one-way-cab/delhi-to-haridwar",
     label: "Delhi to Haridwar cab fares",
     note: "Arrive before the evening aarti",
   },
@@ -105,7 +120,7 @@ const BY_SLUG: Record<string, CrossLink> = {
     note: "Timings, ghats and getting around",
   },
   "rishikesh-haridwar-combo-tour": {
-    path: "/delhi-to-haridwar",
+    path: "/one-way-cab/delhi-to-haridwar",
     label: "Delhi to Haridwar cab fares",
     note: "Both towns in one booking",
   },
@@ -190,7 +205,7 @@ const BY_CATEGORY: Record<string, CrossLink> = {
     note: "Multi-day vehicle with driver",
   },
   haridwar: {
-    path: "/delhi-to-haridwar",
+    path: "/one-way-cab/delhi-to-haridwar",
     label: "Delhi to Haridwar cab fares",
     note: "Door-to-door transfers",
   },
@@ -242,7 +257,7 @@ export type TransportSet = {
 
 const ARRIVE_RISHIKESH: CrossLink[] = [
   { path: "/delhi-to-rishikesh", label: "Delhi to Rishikesh cab", note: "Published fares by vehicle, 240 km" },
-  { path: "/one-way-cab/delhi-to-rishikesh", label: "One-way drop", note: "No return fare charged" },
+  { path: "/delhi-to-rishikesh", label: "One-way drop", note: "No return fare charged" },
   { path: "/airport-service/dehradun", label: "Dehradun airport transfer", note: "Jolly Grant is the nearest airport" },
   { path: "/distance/delhi-to-rishikesh", label: "Distance and drive time", note: "Route, stops and how long it really takes" },
   { path: "/toll-cost/delhi-to-rishikesh", label: "Toll estimate", note: "Plaza-by-plaza planning figure" },
@@ -250,7 +265,7 @@ const ARRIVE_RISHIKESH: CrossLink[] = [
 ];
 
 const ARRIVE_HARIDWAR: CrossLink[] = [
-  { path: "/delhi-to-haridwar", label: "Delhi to Haridwar cab", note: "Published fares by vehicle" },
+  { path: "/one-way-cab/delhi-to-haridwar", label: "Delhi to Haridwar cab", note: "Published fares by vehicle" },
   { path: "/one-way-cab/delhi-to-haridwar", label: "One-way drop", note: "No return fare charged" },
   { path: "/rishikesh-to-haridwar", label: "Rishikesh to Haridwar", note: "Local transfer, about 25 km" },
   { path: "/toll-cost/delhi-to-haridwar", label: "Toll estimate", note: "Plaza-by-plaza planning figure" },
@@ -259,7 +274,7 @@ const ARRIVE_HARIDWAR: CrossLink[] = [
 
 const YATRA_TRANSPORT: CrossLink[] = [
   { path: "/chardham-yatra", label: "Char Dham cab packages", note: "Multi-day vehicle with driver" },
-  { path: "/delhi-to-haridwar", label: "Delhi to Haridwar cab", note: "The usual road start for the circuit" },
+  { path: "/one-way-cab/delhi-to-haridwar", label: "Delhi to Haridwar cab", note: "The usual road start for the circuit" },
   { path: "/delhi-to-rishikesh", label: "Delhi to Rishikesh cab", note: "The alternative starting point" },
   { path: "/tempo-traveller/delhi-to-rishikesh", label: "Tempo traveller for groups", note: "Yatra groups of 12 and up" },
   { path: "/airport-service/dehradun", label: "Dehradun airport transfer", note: "Fly in, start the circuit by road" },
@@ -441,7 +456,7 @@ export const footerMainLinks: CrossLink[] = [
   { path: "/delhi-to-rishikesh", label: "Delhi to Rishikesh cab" },
   { path: "/rishikesh", label: "Rishikesh cab services" },
   { path: "/chardham-yatra", label: "Char Dham packages" },
-  { path: "/delhi-to-haridwar", label: "Delhi to Haridwar cab" },
+  { path: "/one-way-cab/delhi-to-haridwar", label: "Delhi to Haridwar cab" },
   { path: "/tempo-traveller/delhi-to-rishikesh", label: "Tempo traveller for groups" },
 ];
 
