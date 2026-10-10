@@ -62,9 +62,15 @@ export const metadata: Metadata = {
     description: site.description,
   },
   alternates: { canonical: site.baseUrl },
-  // Search Console ownership proof — omitted entirely until the token is set.
-  ...(analytics.gscVerification && {
-    verification: { google: analytics.gscVerification },
+  // Search engine ownership proof. Each token is omitted entirely when unset,
+  // so an empty value can never render an empty verification tag.
+  ...((analytics.gscVerification || analytics.bingVerification) && {
+    verification: {
+      ...(analytics.gscVerification && { google: analytics.gscVerification }),
+      ...(analytics.bingVerification && {
+        other: { "msvalidate.01": analytics.bingVerification },
+      }),
+    },
   }),
 };
 
