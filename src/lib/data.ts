@@ -1,4 +1,6 @@
 import { type ImgKey } from "./images";
+import { guidesWave2 } from "./dataWave2";
+import { nearbyWave2 } from "./dataWave2Nearby";
 
 export type Category =
   | "activity"
@@ -26,6 +28,27 @@ export interface Item {
   emoji?: string;
   badge?: string;
   parent?: string; // for sub-pages (e.g. rafting stretch -> river-rafting-in-rishikesh)
+
+  /* ---- per-item editorial content (optional) --------------------------
+   * Everything above describes an item; the fields below let a page carry
+   * writing of its own.
+   *
+   * Why they exist: intro(), includes(), excludes(), carry() and faqs() in
+   * content.ts are keyed on `category`, so every item in a category renders
+   * an identical body and an identical FAQ list with only the title swapped
+   * in. That is fine for a set of near-identical products — four rafting
+   * stretches genuinely differ only by distance — but it means two pages
+   * answering different questions cannot read differently, and a page whose
+   * only unique text is its title has nothing of its own to rank on.
+   *
+   * Set `body` and the page leads with its own prose instead of the category
+   * paragraph. Set `ownFaqs` and those questions come first, ahead of the
+   * generated ones. Items that set neither behave exactly as before.
+   */
+  body?: string[];                                      // lead paragraphs, in order
+  sections?: { heading: string; paragraphs: string[] }[];
+  ownFaqs?: { q: string; a: string }[];                 // asked before the generated set
+  notFor?: string;                                      // who should honestly skip this
 }
 
 /* ------------------------------------------------------------------ */
@@ -191,6 +214,11 @@ export const allItems: Item[] = [
   ...haridwar,
   ...nearby,
   ...guides,
+  // Wave 2, October 2026 — 18 guides and 10 nearby destinations, each
+  // carrying its own body, sections and FAQs rather than the category
+  // boilerplate. See the header comments in both files.
+  ...guidesWave2,
+  ...nearbyWave2,
 ];
 
 export const itemBySlug = (slug: string) =>

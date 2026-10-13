@@ -1,7 +1,10 @@
 import type { Item } from "./data";
 import { site } from "./site";
 
+// A page that brought its own writing uses it. Everything below this line is
+// the fallback for items that did not — see the `body` note on Item in data.ts.
 export function intro(i: Item): string {
+  if (i.body?.length) return i.body[0];
   const base = `${i.title} is one of Rishikesh's most loved experiences. ${i.tagline} `;
   const map: Record<string, string> = {
     activity: `Triveni partners with government-licensed operators so you get certified guides, well-maintained safety gear and a smooth, photo-worthy ride from start to finish. Book in minutes over WhatsApp — no advance payment needed.`,
@@ -141,9 +144,17 @@ export function faqs(i: Item): { q: string; a: string }[] {
     { q: `What is your cancellation policy?`, a: `Cancellations with reasonable notice are generally free or low-fee; weather/safety cancellations by the operator are fully refundable or rescheduled. See our Cancellation & Refund Policy.` },
   ];
 
-  const all = [...core, ...metaQs, ...(byCat[i.category] ?? []), ...closers];
+  // A page's own questions lead, because they are the ones it was written to
+  // answer; the generated set follows and fills out the long tail. Duplicates
+  // are dropped on the question text so an item can deliberately override a
+  // generated answer by asking the same thing better.
+  const own = i.ownFaqs ?? [];
+  const seen = new Set(own.map((q) => q.q.toLowerCase().trim()));
+  const generated = [...core, ...metaQs, ...(byCat[i.category] ?? []), ...closers].filter(
+    (q) => !seen.has(q.q.toLowerCase().trim()),
+  );
   // 8–14 questions
-  return all.slice(0, 14);
+  return [...own, ...generated].slice(0, 14);
 }
 
 export interface PriceRow {

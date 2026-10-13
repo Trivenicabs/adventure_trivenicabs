@@ -145,6 +145,32 @@ export default async function DetailPage({
             <p className="font-serif-d text-xl leading-snug text-ink">{intro(item)}</p>
           </Reveal>
 
+          {/* Remaining lead paragraphs, for items that carry their own writing.
+              intro() has already rendered body[0]. */}
+          {item.body && item.body.length > 1 && (
+            <Reveal className="mt-5">
+              <div className="space-y-4">
+                {item.body.slice(1).map((p, idx) => (
+                  <p key={idx} className="leading-relaxed text-ink-soft">{p}</p>
+                ))}
+              </div>
+            </Reveal>
+          )}
+
+          {/* The honest counter-advice. Placed high deliberately: a reader who
+              should not book this is better served finding out here than after
+              paying, and saying so is what makes the rest of the page credible. */}
+          {item.notFor && (
+            <Reveal className="mt-8">
+              <div className="panel border-l-4 border-rust bg-cream p-5">
+                <div className="text-[11px] font-bold uppercase tracking-wide text-rust">
+                  Who should skip this
+                </div>
+                <p className="mt-2 leading-relaxed text-ink">{item.notFor}</p>
+              </div>
+            </Reveal>
+          )}
+
           {item.highlights && (
             <Reveal className="mt-10">
               <h2 className="section-h text-ink">Highlights</h2>
@@ -172,6 +198,20 @@ export default async function DetailPage({
               </div>
             </Reveal>
           )}
+
+          {/* Per-item sections. These carry the substance on pages written to
+              answer a question rather than to sell one product, so they sit
+              above the price list rather than below it. */}
+          {item.sections?.map((s) => (
+            <Reveal key={s.heading} className="mt-10">
+              <h2 className="section-h text-ink">{s.heading}</h2>
+              <div className="mt-4 space-y-4">
+                {s.paragraphs.map((p, idx) => (
+                  <p key={idx} className="leading-relaxed text-ink-soft">{p}</p>
+                ))}
+              </div>
+            </Reveal>
+          ))}
 
           {prices && (
             <Reveal className="mt-10">
