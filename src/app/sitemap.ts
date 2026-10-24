@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { allItems } from "@/lib/data";
+import { allItems, categoryIndexPages } from "@/lib/data";
 import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -24,5 +24,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
-  return [...staticPages, ...itemPages];
+  // The category index pages sit above their items: each one is the browse
+  // entry point for everything under it, and is the page we would rather have
+  // ranking for the broad query.
+  const indexPages = categoryIndexPages.map((ci) => ({
+    url: `${site.baseUrl}/${ci.slug}`,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  }));
+  return [...staticPages, ...indexPages, ...itemPages];
 }

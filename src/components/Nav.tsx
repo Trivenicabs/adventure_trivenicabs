@@ -7,13 +7,16 @@ import { motion, AnimatePresence } from "motion/react";
 import BookButton from "./BookButton";
 import { site, telLink } from "@/lib/site";
 
+// "Guides" used to be a homepage anchor showing seven of the twenty-five
+// guides. It now points at the index page that lists all of them, which for
+// eighteen of those pages is the only route in that is not a search result.
 const links = [
   { href: "/river-rafting-in-rishikesh", label: "Rafting" },
   { href: "/#activities", label: "Activities" },
   { href: "/rishikesh-adventure-packages", label: "Packages" },
   { href: "/bike-rental-in-rishikesh", label: "Rentals" },
   { href: "/char-dham-yatra-from-rishikesh", label: "Yatra" },
-  { href: "/#guides", label: "Guides" },
+  { href: "/rishikesh-trip-planning-guides", label: "Guides" },
 ];
 
 export default function Nav() {

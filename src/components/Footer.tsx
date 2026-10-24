@@ -3,7 +3,7 @@ import { footerMainLinks, mainUrl } from "@/lib/crosslinks";
 import Image from "next/image";
 import Divider from "./Divider";
 import { site, waLink, telLink } from "@/lib/site";
-import { activities, packages, rentals, yatra } from "@/lib/data";
+import { activities, packages, rentals, yatra, categoryIndexPages } from "@/lib/data";
 
 const col = (items: { slug: string; title: string }[], n = 5) =>
   items.slice(0, n).map((i) => ({ href: `/${i.slug}`, label: i.title }));
@@ -33,7 +33,17 @@ export default function Footer() {
 
           <FooterCol title="Top Activities" links={col(activities, 6)} />
           <FooterCol title="Packages" links={col(packages, 5)} />
-          <FooterCol title="Rentals & Tours" links={[...col(rentals, 3), ...col(yatra, 3)]} />
+          {/* The category indexes sit above the individual listings here: they
+              are the browse entry points, and two of the three cover pages
+              that have no other sitewide link. */}
+          <FooterCol
+            title="Browse & Rentals"
+            links={[
+              ...categoryIndexPages.map((ci) => ({ href: `/${ci.slug}`, label: ci.meta.label })),
+              ...col(rentals, 2),
+              ...col(yatra, 1),
+            ]}
+          />
 
           <div>
             <h4 className="footer-h">Get in touch</h4>

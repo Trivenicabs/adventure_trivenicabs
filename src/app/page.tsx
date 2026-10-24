@@ -17,15 +17,27 @@ import {
   yatra,
   haridwar,
   guides,
+  nearby,
   categoryMeta,
 } from "@/lib/data";
+import { guidesWave2 } from "@/lib/dataWave2";
+import { nearbyWave2 } from "@/lib/dataWave2Nearby";
 import { img } from "@/lib/images";
 
+// Where each category card goes. Six of these point at the hub item that
+// serves as the category's index in practice; bike-tour now points at the real
+// index page rather than one arbitrary tour, because there are six of them and
+// sending everybody to Chopta was a guess.
+//
+// The cards show each category's `lede` — two or three lines about choosing
+// between the listings — rather than the old four-word blurb, which named the
+// category and told the reader nothing they had not already worked out from
+// clicking on it.
 const categories = [
   { key: "activity", href: "/river-rafting-in-rishikesh", image: "rafting", no: "01" },
   { key: "package", href: "/rishikesh-adventure-packages", image: "camping", no: "02" },
   { key: "rental", href: "/bike-rental-in-rishikesh", image: "enfield", no: "03" },
-  { key: "bike-tour", href: "/bike-tour-rishikesh-to-chopta-tungnath", image: "chopta", no: "04" },
+  { key: "bike-tour", href: "/himalayan-bike-tours-from-rishikesh", image: "chopta", no: "04" },
   { key: "yatra", href: "/char-dham-yatra-from-rishikesh", image: "kedarnath", no: "05" },
   { key: "haridwar", href: "/haridwar-ganga-aarti-tour", image: "aarti", no: "06" },
 ] as const;
@@ -73,14 +85,16 @@ export default function Home() {
                       {c.no}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-4">
-                    <div>
+                  <div className="flex items-start justify-between gap-3 p-4">
+                    <div className="min-w-0">
                       <h3 className="font-display text-xl uppercase text-ink group-hover:text-rust">
                         {categoryMeta[c.key].label}
                       </h3>
-                      <p className="text-sm text-ink-soft">{categoryMeta[c.key].blurb}</p>
+                      <p className="mt-1 font-serif-d text-sm leading-snug text-ink-soft">
+                        {categoryMeta[c.key].lede}
+                      </p>
                     </div>
-                    <span className="font-display text-2xl text-rust">→</span>
+                    <span className="shrink-0 font-display text-2xl text-rust">→</span>
                   </div>
                 </Link>
               </RevealItem>
@@ -267,10 +281,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* day trips — the fourteen nearby destinations had no entry point at
+          all before the index page existed; this is it. */}
+      <section className="section-pad !pt-0">
+        <div className="container-x">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading
+              eyebrow="Out of town"
+              title={<>Day trips & <span className="text-rust">getaways</span></>}
+              sub={categoryMeta.nearby.lede}
+            />
+            <Reveal delay={0.1}>
+              <Link href="/day-trips-from-rishikesh" className="btn btn-paper">
+                All {nearby.length + nearbyWave2.length} destinations →
+              </Link>
+            </Reveal>
+          </div>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[...nearby.slice(0, 2), ...nearbyWave2.slice(0, 2)].map((n, i) => (
+              <Reveal key={n.slug} delay={(i % 2) * 0.06}>
+                <ItemCard item={n} className="h-full" />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* guides */}
       <section id="guides" className="section-pad !pt-0">
         <div className="container-x">
-          <SectionHeading eyebrow="Plan like a local" title={<>Rishikesh <span className="text-rust">travel guides</span></>} />
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading
+              eyebrow="Plan like a local"
+              title={<>Rishikesh <span className="text-rust">travel guides</span></>}
+            />
+            <Reveal delay={0.1}>
+              <Link href="/rishikesh-trip-planning-guides" className="btn btn-paper">
+                All {guides.length + guidesWave2.length} guides →
+              </Link>
+            </Reveal>
+          </div>
           <div className="mt-8 flex flex-wrap gap-3">
             {guides.map((g, i) => (
               <Reveal key={g.slug} delay={i * 0.03}>

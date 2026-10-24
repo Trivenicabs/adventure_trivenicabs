@@ -6,17 +6,41 @@ import Reveal, { RevealItem } from "@/components/Reveal";
 import ItemCard from "@/components/ItemCard";
 import FaqList from "@/components/FaqList";
 import BookButton from "@/components/BookButton";
-import { allItems, itemBySlug, categoryMeta, type Item } from "@/lib/data";
+import CategoryIndex from "@/components/CategoryIndex";
+import {
+  allItems,
+  itemBySlug,
+  categoryMeta,
+  categoryIndexPages,
+  categoryIndexBySlug,
+  categoryIndexFor,
+  type Item,
+} from "@/lib/data";
 import { img, galleryFor } from "@/lib/images";
 import { intro, includes, excludes, carry, faqs, priceTable } from "@/lib/content";
-import { keywordsFor, metaTitle, metaDescription, breadcrumbSchema } from "@/lib/seo";
+import {
+  keywordsFor,
+  metaTitle,
+  metaDescription,
+  breadcrumbSchema,
+  categoryKeywordsFor,
+  categoryMetaTitle,
+  categoryMetaDescription,
+} from "@/lib/seo";
 import { themeFor } from "@/lib/themes";
 import { site, telLink } from "@/lib/site";
 import { crossLinkFor, mainUrl, transportSetFor } from "@/lib/crosslinks";
 import { sourcesFor } from "@/lib/sources";
 
+// This catch-all serves two kinds of page: the 107 item pages, and the category
+// index pages for the categories that have no hub item standing in for them.
+// Both are flat, single-segment URLs on this site, so they share the route
+// rather than each needing their own folder — the branch is one lookup.
 export function generateStaticParams() {
-  return allItems.map((i) => ({ slug: i.slug.split("/") }));
+  return [
+    ...allItems.map((i) => ({ slug: i.slug.split("/") })),
+    ...categoryIndexPages.map((ci) => ({ slug: [ci.slug] })),
+  ];
 }
 
 export async function generateMetadata({
@@ -25,8 +49,35 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const item = itemBySlug(slug.join("/"));
-  if (!item) return {};
+  const path = slug.join("/");
+  const item = itemBySlug(path);
+  if (!item) {
+    const ci = categoryIndexBySlug(path);
+    if (!ci) return {};
+    const title = categoryMetaTitle(ci);
+    const description = categoryMetaDescription(ci);
+    const url = `${site.baseUrl}/${ci.slug}`;
+    return {
+      title,
+      description,
+      keywords: categoryKeywordsFor(ci),
+      alternates: { canonical: url },
+      openGraph: {
+        title,
+        description,
+        url,
+        type: "website",
+        siteName: site.name,
+        images: [{ url: img[ci.image], alt: ci.keyword }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [img[ci.image]],
+      },
+    };
+  }
   const title = metaTitle(item);
   const description = metaDescription(item);
   const url = `${site.baseUrl}/${item.slug}`;
@@ -60,7 +111,11 @@ export default async function DetailPage({
   const { slug: slugParts } = await params;
   const slug = slugParts.join("/");
   const item = itemBySlug(slug);
-  if (!item) notFound();
+  if (!item) {
+    const ci = categoryIndexBySlug(slug);
+    if (ci) return <CategoryIndex ci={ci} />;
+    notFound();
+  }
 
   const related = allItems
     .filter((r) => r.category === item.category && r.slug !== item.slug)
@@ -436,7 +491,18 @@ export default async function DetailPage({
       {rel.length > 0 && (
         <section className="border-t-2 border-ink bg-paper-2 section-pad">
           <div className="container-x">
-            <h2 className="section-h text-ink">You might also like</h2>
+            <h2 className="section-h text-ink">
+              {related.length ? `More ${categoryMeta[item.category].label.toLowerCase()}` : "You might also like"}
+            </h2>
+            {/* When the rail is showing siblings rather than a fallback mix, the
+                category's lede goes above it — it is one line about choosing
+                between the things in that category, which is exactly the
+                question a reader looking at this rail is asking. */}
+            {related.length > 0 && (
+              <p className="mt-2 max-w-2xl font-serif-d text-ink-soft">
+                {categoryMeta[item.category].lede}
+              </p>
+            )}
             {/* The related grid closes all 77 content pages. A staggered reveal
                 with alternating start angles makes it read as a set being laid
                 out rather than appearing at once. */}
@@ -447,7 +513,21 @@ export default async function DetailPage({
                 </RevealItem>
               ))}
             </Reveal>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap gap-3">
+              {/* The three categories with an index page get a link to it from
+                  every one of their items — for the eighteen Wave 2 guides and
+                  the ten Wave 2 destinations this is the only sitewide route
+                  back out to their siblings. */}
+              {(() => {
+                const index = categoryIndexFor(item.category);
+                if (!index) return null;
+                const count = allItems.filter((i) => i.category === item.category).length;
+                return (
+                  <Link href={`/${index.slug}`} className="btn btn-rust">
+                    See all {count} {categoryMeta[item.category].label.toLowerCase()} →
+                  </Link>
+                );
+              })()}
               <Link href="/" className="btn btn-paper">← Back to all adventures</Link>
             </div>
           </div>
@@ -458,11 +538,21 @@ export default async function DetailPage({
 }
 
 function Breadcrumb({ item }: { item: Item }) {
+  // The category crumb becomes a real link on the categories that have an index
+  // page. On the rest it stays plain text, as it always was — the alternative
+  // was linking it at the item's own URL, which is what the breadcrumb schema
+  // used to do and is worse than not linking it at all.
+  const index = categoryIndexFor(item.category);
+  const label = categoryMeta[item.category].label;
   return (
     <nav className="flex flex-wrap items-center gap-2 font-display text-xs uppercase tracking-wide text-ink-soft">
       <Link href="/" className="hover:text-rust">Home</Link>
       <span>/</span>
-      <span className="text-teal">{categoryMeta[item.category].label}</span>
+      {index ? (
+        <Link href={`/${index.slug}`} className="text-teal hover:text-rust">{label}</Link>
+      ) : (
+        <span className="text-teal">{label}</span>
+      )}
       <span>/</span>
       <span className="text-ink">{item.title}</span>
     </nav>

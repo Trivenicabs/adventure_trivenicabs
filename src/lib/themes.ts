@@ -59,23 +59,29 @@ const SLUG_VIBE: Record<string, Vibe> = {
   "atv-quad-biking-in-rishikesh": "ride",
 };
 
+// One vibe per category. Shared by themeFor() as its fallback and by the
+// category index pages, which have no item to theme from.
+const CATEGORY_VIBE: Record<string, Vibe> = {
+  activity: "earth",
+  "rafting-stretch": "water",
+  package: "fire",
+  rental: "ride",
+  "bike-tour": "ride",
+  yatra: "pilgrim",
+  haridwar: "pilgrim",
+  nearby: "ride",
+  guide: "guide",
+};
+
+/** The theme for a whole category — used by the category index pages. */
+export function themeForCategory(category: string): Theme {
+  return THEMES[CATEGORY_VIBE[category] ?? "guide"];
+}
+
 export function themeFor(item: Item): Theme {
   // explicit per-slug override first
   const direct = SLUG_VIBE[item.slug];
   if (direct) return THEMES[direct];
 
-  // rafting stretch sub-pages → water
-  if (item.category === "rafting-stretch") return THEMES.water;
-
-  const byCat: Record<string, Vibe> = {
-    activity: "earth",
-    package: "fire",
-    rental: "ride",
-    "bike-tour": "ride",
-    yatra: "pilgrim",
-    haridwar: "pilgrim",
-    nearby: "ride",
-    guide: "guide",
-  };
-  return THEMES[byCat[item.category] ?? "guide"];
+  return themeForCategory(item.category);
 }

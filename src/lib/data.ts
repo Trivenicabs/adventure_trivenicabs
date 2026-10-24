@@ -2,6 +2,7 @@ import { type ImgKey } from "./images";
 import { guidesWave2 } from "./dataWave2";
 import { nearbyWave2 } from "./dataWave2Nearby";
 import { wave3Content } from "./contentWave3";
+import { categoryContent, categoryIndexes, type CategoryContent } from "./contentCategories";
 
 export type Category =
   | "activity"
@@ -245,10 +246,22 @@ export const allItems: Item[] = withWave3([
 export const itemBySlug = (slug: string) =>
   allItems.find((i) => i.slug === slug);
 
-export const categoryMeta: Record<
-  Category,
-  { label: string; blurb: string }
-> = {
+/* ------------------------------------------------------------------ */
+/* Category metadata and category-level content                        */
+/* ------------------------------------------------------------------ */
+//
+// `label` and `blurb` are the originals: the label names the category on
+// cards, tags and breadcrumbs, and the blurb is the one-liner on the
+// homepage grid. Both are still used in exactly those places.
+//
+// Everything merged in from contentCategories.ts — `lede`, `body`,
+// `sections`, `ownFaqs`, `notFor` — is the category's own writing, in the
+// same shape as an item's. A category that has it can render a real index
+// page instead of a bare list; see the header comment in that file for
+// which categories get one and why the other six do not.
+export type CategoryMeta = { label: string; blurb: string } & CategoryContent;
+
+const categoryLabels: Record<Category, { label: string; blurb: string }> = {
   activity: { label: "Adventure Sports", blurb: "Rafting, bungee, zipline & more" },
   "rafting-stretch": { label: "Rafting Stretches", blurb: "9 / 16 / 26 / 36 km" },
   package: { label: "Packages & Combos", blurb: "Save more, do more" },
@@ -259,3 +272,34 @@ export const categoryMeta: Record<
   nearby: { label: "Nearby Getaways", blurb: "Hills & wildlife" },
   guide: { label: "Travel Guides", blurb: "Plan like a local" },
 };
+
+export const categoryMeta = Object.fromEntries(
+  (Object.keys(categoryLabels) as Category[]).map((c) => [
+    c,
+    { ...categoryLabels[c], ...categoryContent[c] },
+  ]),
+) as Record<Category, CategoryMeta>;
+
+/** Every item in a category, in listing order. */
+export const itemsInCategory = (category: Category): Item[] =>
+  allItems.filter((i) => i.category === category);
+
+/**
+ * The category index pages, resolved against the live item list so a
+ * listing can never be built for a category with nothing in it.
+ */
+export type CategoryIndex = (typeof categoryIndexes)[number] & {
+  meta: CategoryMeta;
+  items: Item[];
+};
+
+export const categoryIndexPages: CategoryIndex[] = categoryIndexes
+  .map((ci) => ({ ...ci, meta: categoryMeta[ci.category], items: itemsInCategory(ci.category) }))
+  .filter((ci) => ci.items.length > 0);
+
+export const categoryIndexBySlug = (slug: string) =>
+  categoryIndexPages.find((ci) => ci.slug === slug);
+
+/** The index page for a category, where one exists. */
+export const categoryIndexFor = (category: Category) =>
+  categoryIndexPages.find((ci) => ci.category === category);
