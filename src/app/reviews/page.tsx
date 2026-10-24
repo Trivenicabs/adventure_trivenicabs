@@ -7,7 +7,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Rishikesh Adventure Reviews",
   description:
-    "Read what travellers say about rafting, bungee, camping, rentals and yatra booked with Triveni Adventure Rishikesh. Rated 4.9★ by 10,000+ travellers.",
+    "Read what travellers say about rafting, bungee, camping, rentals and yatra booked with Triveni Adventure Rishikesh. Rated 4.9★ from 354 reviews on the Google Business Profile.",
 };
 
 const reviews = [
@@ -23,7 +23,7 @@ export default function ReviewsPage() {
   return (
     <>
       <PageHeader
-        eyebrow={`★ ${site.rating} / 5 · ${site.reviewCount.toLocaleString()}+ travellers`}
+        eyebrow={`★ ${site.rating} / 5 · ${site.reviewCount} reviews on Google`}
         title={<>Loved by <span className="text-rust">thrill-seekers</span></>}
         sub="A 4.9★ legacy from Triveni Cabs, now powering Rishikesh's best adventures."
       />

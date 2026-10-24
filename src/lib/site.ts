@@ -14,8 +14,18 @@ export const site = {
   // Canonical host for the main site. The bare domain redirects to www, so
   // linking straight to www saves every cross-site link a redirect hop.
   parentUrl: "https://www.trivenicabs.in",
+  // The verified Google Business Profile figures for the business.
+  //
+  // reviewCount was 10000. Nothing supported it, and it was reaching
+  // readers in the footer and answer engines in two AggregateRating
+  // nodes. 354 is the number on the profile, which is the number a
+  // customer sees when they check.
+  //
+  // These belong to the BUSINESS. Do not attach them to an item: a
+  // per-tour rating claims that this many people reviewed that one
+  // tour, and there is no per-tour review data behind it.
   rating: 4.9,
-  reviewCount: 10000,
+  reviewCount: 354,
   social: {
     instagram: "https://instagram.com/trivenicabs",
     facebook: "https://facebook.com/trivenicabs",

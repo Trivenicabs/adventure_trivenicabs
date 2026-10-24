@@ -572,11 +572,16 @@ function Schema({ item, qa }: { item: Item; qa: { q: string; a: string }[] }) {
         keywords: keywordsFor(item).join(", "),
         category: categoryMeta[item.category].label,
         brand: { "@type": "Brand", name: site.name },
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: site.rating,
-          reviewCount: site.reviewCount,
-        },
+        // No aggregateRating here, deliberately.
+        //
+        // This node is a Product - one tour, one rental, one package.
+        // Attaching the business rating to it told every answer engine
+        // that this many people had reviewed THIS item, and repeated the
+        // same claim across all 107 of them.
+        //
+        // The business rating is published once, on the TravelAgency node
+        // in src/lib/seo.ts, which is the thing it actually describes. Add
+        // a rating back here only if per-item review data ever exists.
         ...(item.priceFrom && {
           offers: {
             "@type": "Offer",

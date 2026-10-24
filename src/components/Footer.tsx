@@ -27,7 +27,7 @@ export default function Footer() {
               rentals — by {site.parent}, North India&apos;s trusted travel brand.
             </p>
             <div className="mt-5 font-display text-sm text-mustard">
-              ★ {site.rating} / 5 · {site.reviewCount.toLocaleString()}+ travellers
+              ★ {site.rating} / 5 · {site.reviewCount} reviews on Google
             </div>
           </div>
 

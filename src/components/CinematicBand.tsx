@@ -6,7 +6,7 @@ import { img } from "@/lib/images";
 
 const stats = [
   { v: "30+", l: "Adventures & tours" },
-  { v: "4.9★", l: "From 10,000+ travellers" },
+  { v: "4.9★", l: "From 354 Google reviews" },
   { v: "9–36", l: "km of Ganga rapids" },
   { v: "24×7", l: "On-ground support" },
 ];

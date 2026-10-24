@@ -46,7 +46,7 @@ const why = [
   { n: "1", title: "Certified & insured", body: "Govt-licensed operators, ISO safety gear and trained guides on every activity." },
   { n: "2", title: "One brand, end-to-end", body: "Cab from Delhi, adventure in Rishikesh, yatra to the dhams — all under Triveni." },
   { n: "3", title: "Instant WhatsApp booking", body: "No app, no pre-payment. Confirm your slot in a single chat, 24×7." },
-  { n: "4", title: "10,000+ travellers", body: "A 4.9★ legacy from the parent Triveni Cabs brand, now on the river." },
+  { n: "4", title: "10,000+ travellers", body: "Carried by the parent Triveni Cabs brand, which holds 4.9★ from 354 Google reviews." },
 ];
 
 const reviews = [

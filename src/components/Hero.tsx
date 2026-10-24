@@ -77,7 +77,7 @@ export default function Hero() {
           >
             {[
               { v: "30+", l: "Activities" },
-              { v: "4.9★", l: "10,000+ rated" },
+              { v: "4.9★", l: "on Google" },
               { v: "9–36km", l: "Ganga rapids" },
               { v: "₹600", l: "Rafting from" },
             ].map((s, i) => (
