@@ -1,6 +1,7 @@
 import { type ImgKey } from "./images";
 import { guidesWave2 } from "./dataWave2";
 import { nearbyWave2 } from "./dataWave2Nearby";
+import { wave3Content } from "./contentWave3";
 
 export type Category =
   | "activity"
@@ -204,7 +205,27 @@ export const guides: Item[] = [
   { slug: "things-to-do-in-rishikesh", title: "Things to Do in Rishikesh", keyword: "things to do in rishikesh", category: "guide", image: "riverValley", emoji: "✨", tagline: "30+ adventures, cafes, ghats, yoga and day trips around Rishikesh." },
 ];
 
-export const allItems: Item[] = [
+/**
+ * Attach Wave 3 writing to the items it was written for.
+ *
+ * Wave 3 (October 2026) gave each of the 79 remaining pages its own body,
+ * sections, FAQs and `notFor` instead of the category boilerplate in
+ * content.ts. The writing lives in contentWave3*.ts keyed by slug, and is
+ * merged here rather than pasted into the item literals below - 79 edits
+ * across three large data files would have been far harder to review, and
+ * keeping the prose separate from the product data means a page's facts and
+ * a page's writing can be changed independently.
+ *
+ * An item that has no Wave 3 entry passes through untouched and keeps
+ * rendering the category fallback, exactly as before.
+ */
+const withWave3 = (items: Item[]): Item[] =>
+  items.map((i) => {
+    const extra = wave3Content[i.slug];
+    return extra ? { ...i, ...extra } : i;
+  });
+
+export const allItems: Item[] = withWave3([
   ...activities,
   ...raftingStretches,
   ...packages,
@@ -219,7 +240,7 @@ export const allItems: Item[] = [
   // boilerplate. See the header comments in both files.
   ...guidesWave2,
   ...nearbyWave2,
-];
+]);
 
 export const itemBySlug = (slug: string) =>
   allItems.find((i) => i.slug === slug);
