@@ -150,10 +150,14 @@ export default async function DetailPage({
                 <span className="tag !bg-teal !text-cream">{vibe}</span>
                 {item.badge && <span className="tag !bg-rust !text-cream">{item.badge}</span>}
               </div>
-              <h1 className="section-h mt-4 max-w-2xl !text-[clamp(2.4rem,6vw,4.4rem)] text-ink">
+              {/* speakable-headline / speakable-lead are the two hooks the
+                  SpeakableSpecification in <Schema> points at. They are classes
+                  rather than tag selectors so that restyling the hero cannot
+                  silently detach the markup from the schema. */}
+              <h1 className="speakable-headline section-h mt-4 max-w-2xl !text-[clamp(2.4rem,6vw,4.4rem)] text-ink">
                 {item.title}
               </h1>
-              <p className="mt-4 max-w-xl font-serif-d text-lg leading-snug text-ink-soft">
+              <p className="speakable-lead mt-4 max-w-xl font-serif-d text-lg leading-snug text-ink-soft">
                 {item.tagline}
               </p>
 
@@ -591,6 +595,26 @@ function Schema({ item, qa }: { item: Item; qa: { q: string; a: string }[] }) {
             url: `${site.baseUrl}/${item.slug}`,
           },
         }),
+      },
+      {
+        // Speakable. The cab site has carried this sitewide for months and this
+        // site had it on none of its 107 pages, so an assistant reading a result
+        // aloud had nothing marked as the part worth reading.
+        //
+        // Two selectors only, and both are elements that always render: the
+        // headline and the one-line tagline beneath it. The obvious third
+        // candidate, the first FAQ answer, is deliberately left out - FaqList is
+        // an accordion that unmounts a closed answer, so the target would vanish
+        // from the DOM the moment a reader collapsed it.
+        "@type": "WebPage",
+        "@id": `${site.baseUrl}/${item.slug}#webpage`,
+        url: `${site.baseUrl}/${item.slug}`,
+        name: item.title,
+        description: item.tagline,
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: [".speakable-headline", ".speakable-lead"],
+        },
       },
       {
         "@type": "FAQPage",
